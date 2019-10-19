@@ -11,8 +11,8 @@ pipeline {
     }
     stages {
         stage('Deploy') {
-            dir('server') {
-                steps { 
+            steps { 
+                dir('server') {
                     sh '''
                         docker-compose build --pull
                         docker-compose down --remove-orphans
