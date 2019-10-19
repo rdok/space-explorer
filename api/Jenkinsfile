@@ -18,15 +18,17 @@ pipeline {
         } } } }
         stage('Health Check') { 
             agent { label "linux" }
-            retry (5) { steps { 
-                sleep time: 3, unit: 'SECONDS'
-                sh '''
-                response=$(curl 'https://api.space-explorer.rdok.dev/' -H 'Accept: text/html')
-                expected='<title>GraphQL Playground</title>'
-                test "${response#*$expected}" != "$response" \
-                    || error "Failed asserting the GraphQL API loads correctly"; \
-                '''
-        } } }
+            steps { 
+                retry(5) { 
+                    sleep time: 3, unit: 'SECONDS'
+                    sh '''
+                    response=$(curl 'https://api.space-explorer.rdok.dev/' -H 'Accept: text/html')
+                    expected='<title>GraphQL Playground</title>'
+                    test "${response#*$expected}" != "$response" \
+                        || error "Failed asserting the GraphQL API loads correctly"
+                    '''
+            }
+        } }
     }
     post {
         failure {
