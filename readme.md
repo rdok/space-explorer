@@ -6,3 +6,5 @@ Space Explorer API [![Build Status](https://jenkins.rdok.dev/buildStatus/icon?jo
 
 
 ![graphql-playground](https://raw.githubusercontent.com/rdok/space-explorer/master/graphql-playground.png "GraphQL Playground")
+
+[![graphql-playground](https://raw.githubusercontent.com/rdok/space-explorer/master/graphql-playground.png)](https://api.space-explorer.rdok.dev/)]
