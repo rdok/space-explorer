@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Deploy') {
             steps { 
-                dir('server') {
+                dir('api') {
                     sh '''
                         docker-compose build --pull
                         docker-compose down --remove-orphans
