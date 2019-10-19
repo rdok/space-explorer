@@ -9,14 +9,14 @@ pipeline {
         LETSENCRYPT_EMAIL = credentials('rdok-email')
         DEFAULT_EMAIL = credentials('rdok-email')
     }
-    stages { 
+    stages {
         stage('Deploy') { steps { dir('api') { ansiColor('xterm') {
             sh '''
                 docker-compose build --pull
                 docker-compose down --remove-orphans
                 docker-compose up -d
             '''
-        } 
+        } } } }
         stage('Health Check') { steps { 
             sh '''
             response=$(curl 'https://api.space-explorer.rdok.dev/' -H 'Accept: text/html')
