@@ -17,7 +17,7 @@ const { RESTDataSource } = require('apollo-datasource-rest')
 
     async getLaunchById({ launchId }) {
         const response = await this.get('launches', {flight_number: launchId})
-        return this.transformLauncher(response[0])
+        return this.transformLaunch(response[0])
     }
 
     transformLaunch(launch) {
