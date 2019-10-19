@@ -1,0 +1,34 @@
+{
+  "name": "space-explorer-server",
+  "version": "1.0.0",
+  "description": "GraphQL API for the space explorer.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rdok/space-explorer/server"
+  },
+  "keywords": [
+    "space-explorer",
+    "server",
+    "graphQL",
+    "TDD",
+    "Jenkins",
+    "Node"
+  ],
+  "author": "Rizart Dokollari",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.9.6",
+    "graphql": "^14.5.8"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules",
+      "/__utils"
+    ]
+  }
+}
