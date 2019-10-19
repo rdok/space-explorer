@@ -17,7 +17,7 @@ pipeline {
                 docker-compose up -d
             '''
         } } } }
-        stage('Health Check') { agent "linux" steps { 
+        stage('Health Check') { agent "linux" {  steps { 
             sleep time: 5, unit: 'SECONDS'
             sh '''
             response=$(curl 'https://api.space-explorer.rdok.dev/' -H 'Accept: text/html')
