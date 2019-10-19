@@ -27,8 +27,8 @@ pipeline {
                 && echo "Failed asserting the GraphQL API loads correctly"; \
                 ${currentBuild}result = 'FAILURE'
             '''
-        } 
-    } }
+        } }
+    }
     post {
         failure {
             slackSend color: '#FF0000',
