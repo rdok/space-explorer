@@ -17,16 +17,18 @@ pipeline {
                 docker-compose up -d
             '''
         } } } }
-        stage('Health Check') { agent "linux" {  steps { 
-            sleep time: 5, unit: 'SECONDS'
-            sh '''
-            response=$(curl 'https://api.space-explorer.rdok.dev/' -H 'Accept: text/html')
-            expected='<title>GraphQL Playground</title>'
-            test "${response#*$expected}" != "$response" \
-                && echo "Failed asserting the GraphQL API loads correctly"; \
-                ${currentBuild}result = 'FAILURE'
-            '''
-        } } }
+        stage('Health Check') { 
+            agent { label "linux" }
+            steps { 
+                sleep time: 5, unit: 'SECONDS'
+                sh '''
+                response=$(curl 'https://api.space-explorer.rdok.dev/' -H 'Accept: text/html')
+                expected='<title>GraphQL Playground</title>'
+                test "${response#*$expected}" != "$response" \
+                    && echo "Failed asserting the GraphQL API loads correctly"; \
+                    ${currentBuild}result = 'FAILURE'
+                '''
+        } }
     }
     post {
         failure {
