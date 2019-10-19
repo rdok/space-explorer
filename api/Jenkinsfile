@@ -18,7 +18,7 @@ pipeline {
         } } } }
         stage('Health Check') { 
             agent { label "linux" }
-            retry ( 5 ) { steps { 
+            retry (5) { steps { 
                 sleep time: 3, unit: 'SECONDS'
                 sh '''
                 response=$(curl 'https://api.space-explorer.rdok.dev/' -H 'Accept: text/html')
@@ -26,7 +26,7 @@ pipeline {
                 test "${response#*$expected}" != "$response" \
                     || error "Failed asserting the GraphQL API loads correctly"; \
                 '''
-            } }
+        } } }
     }
     post {
         failure {
