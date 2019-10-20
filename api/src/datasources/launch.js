@@ -20,6 +20,12 @@ const { RESTDataSource } = require('apollo-datasource-rest')
         return this.transformLaunch(response[0])
     }
 
+    async getLaunchesByIds({ launchIds }) {
+        return Promise.all( 
+            launchIds.map(launchId => this.getLaunchById({ launchId }) )
+        )
+    }
+
     transformLaunch(launch) {
 
         return {

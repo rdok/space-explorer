@@ -41,4 +41,25 @@ query PaginateLaunches {
     }
   }
 }
+
+mutation LoginUser {
+  login(email: "***REMOVED***")
+}
+
+mutation BookTrips {
+  bookTrips(launchIds: [67, 68, 69]) {
+    success
+    message
+    launches {
+      id
+    }
+  }
+}
+```
+
+#### HTTP Headers
+```
+{
+	"authorization" :"****************************"
+}
 ```
