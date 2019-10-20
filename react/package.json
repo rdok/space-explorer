@@ -23,17 +23,19 @@
     "license": "MIT",
     "dependencies": {
         "@apollo/react-hooks": "^3.1.3",
+        "@reach/router": "^1.2.1",
         "apollo-cache-inmemory": "^1.6.3",
         "apollo-client": "^2.6.4",
         "apollo-link-http": "^1.5.16",
-        "emotion": "^10.0.17",
+        "emotion": "^9.1.3",
         "graphql": "^14.5.8",
         "graphql-tag": "^2.10.1",
         "polished": "^3.4.1",
         "react": "^16.10.2",
         "react-dom": "^16.10.2",
         "react-emotion": "^9.2.12",
-        "react-scripts": "^3.2.0"
+        "react-scripts": "^3.2.0",
+        "typescript": "^3.6.4"
     },
     "browserslist": {
         "production": [
@@ -48,6 +50,7 @@
         ]
     },
     "devDependencies": {
+        "@apollo/react-testing": "^3.1.3",
         "@testing-library/jest-dom": "^4.1.2",
         "@testing-library/react": "^9.3.0"
     }
