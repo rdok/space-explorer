@@ -10,7 +10,7 @@ export const schema = gql`
 export const typeDefs = gql`
     extend type Query {
         isLoggedIn: Boolean!
-        cartItems: [ID!]
+            cartItems: [ID!]
     }
 
     extend type Launch {
@@ -34,8 +34,8 @@ export const resolvers = {
             const { cartItems } = cache.readQuery({ query: GET_CART_ITEMS })
             const data = {
                 cartItems: cartItems.includes(id)
-                    ? cartItems.filter(index => index !== id)
-                    : [...cartItems, id]
+                ? cartItems.filter(index => index !== id)
+                : [...cartItems, id]
             }
             cache.writeQuery({ query: GET_CART_ITEMS, data })
             return data.cartItems
