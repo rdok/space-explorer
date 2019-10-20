@@ -9,18 +9,20 @@ export default function LogoutButton() {
     const client = useApolloClient()
 
     return (
-        <StyleButton
+        <StyledButton
+            data-testid="logout-button"
             onClick={() => {
                 client.writeData({ data: { isLoggedIn: false }})
                 localStorage.clear()
             }}
         >
             <ExitIcon />
-        </StyleButton>
+            Logout
+        </StyledButton>
     )
 }
 
-const StyleButton = styled('button')(menuItemClassName, {
+const StyledButton = styled('button')(menuItemClassName, {
     background: 'none',
     border: 'none',
     padding: 0
