@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 import { Header, Loading } from '../components'
-import { CartItem, BookTrips } from '../components'
+import { CartItem, BookTrips } from '../containers'
 
 export const GET_CART_ITEMS = gql`
     query GetCartItems { cartItems @client }
@@ -27,7 +27,7 @@ export default function Cart() {
                             ))}
                             <BookTrips cartItems={data.cartItems} />
                         </Fragment>
-                    )
+            )}
         </Fragment>
     )
 }

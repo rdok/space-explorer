@@ -8,6 +8,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import gql from "graphql-tag"
 import { resolvers, typeDefs } from './resolvers'
+import Login from './pages/login'
 
 const cache = new InMemoryCache()
 const link = new HttpLink({
@@ -39,6 +40,5 @@ const IS_LOGGED_IN = gql`
 
 function IsLoggedIn() {
     const { data } = useQuery( IS_LOGGED_IN )
-    console.log(data)
     return data.isLoggedIn ? <Pages /> : <Login />
 }

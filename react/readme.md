@@ -6,3 +6,6 @@ $ `./npm start`
 
 Install npm packages
 $ `./npmi {package-name} {etc-args}`
+
+Tests
+$ `./npmi run test`

@@ -12,15 +12,18 @@ const LOGIN_USER = gql `
 
 export default function Login() {
     const client = useApolloClient()
-    const [ login, { data } ] = useMutation(
+    const [ login, { loading, error } ] = useMutation(
         LOGIN_USER,
         {
             onCompleted({ login }) {
                 localStorage.setItem('token', login)
-                client.writeData({ data: isLoggedIn: true })
+                client.writeData({ data: { isLoggedIn: true } })
             }
         }
     )
+
+    if ( loading ) return <Loading />
+    if ( error ) return <p>An error occured</p>
 
     return <LoginForm login={login} />
 }
