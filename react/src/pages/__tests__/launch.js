@@ -1,4 +1,6 @@
 import React from 'react'
+import { act } from "react-dom/test-utils"
+import { render, unmountComponentAtNode } from "react-dom"
 
 import { renderApollo, cleanup, waitForElement } from '../../test-utils'
 
@@ -28,16 +30,17 @@ describe('Launch Page', () => {
 
     afterEach(cleanup)
 
-
     it('renders launch', async () => {
         const mocks = [ {
             request: { query: GET_LAUNCH_DETAILS, variables: { launchId: 1 } },
             results: { data: { launch: mockLaunch } }
         } ]
 
-        const { getByText } = await renderApollo(<Launch launchId={1} />, {
-            mocks, resolvers: {}
-        })
+        const { getByText } = await renderApollo(
+            <Launch launchId={1} />, { mocks, resolvers: {} }
+        )
+
+        console.log(getByText)
 
         await waitForElement( () => getByText( /test mission/i ) )
     })
