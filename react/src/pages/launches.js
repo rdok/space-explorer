@@ -9,8 +9,14 @@ export const LAUNCH_TILE_DATA = gql`
         __typename
         id
         isBooked
-        rocket { id name }
-        mission { name missionPatch }
+        rocket { 
+            id 
+            name 
+        }
+        mission { 
+            name 
+            missionPatch 
+        }
     }
 `
 
@@ -30,7 +36,7 @@ export const GET_LAUNCHES = gql`
 export default function Launches() {
     const { data, loading, error, fetchMore } = useQuery(GET_LAUNCHES)
     if ( loading ) return <Loading />
-    if ( error ) return <p>ERROR</p>
+    if ( error ) return <p>ERROR: { error.message } </p>
 
     return (
         <Fragment>
