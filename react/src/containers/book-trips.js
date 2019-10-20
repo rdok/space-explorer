@@ -4,20 +4,26 @@ import gql from 'graphql-tag'
 
 import Button from '../components/button'
 import { GET_LAUNCH } from './cart-item'
+export { GET_LAUNCH }
 
-const BOOK_TRIPS = gql`
+export const BOOK_TRIPS = gql`
     mutation BookTrips($launchIds: [ID]!) {
         bookTrips(launchIds: $launchIds) {
             success
             message
-            launches { id isBooked }
+            launches { 
+                id 
+                isBooked 
+            }
         }
     }
 `
+
 export default function BookTrips({ cartItems }) {
-    const [bookTrips, { data, loading, error }] = useMutation(
+    const [bookTrips, { data }] = useMutation(
         BOOK_TRIPS,
         {
+            variables: { launchIds: cartItems },
             refetchQueries: cartItems.map(launchId => ({
                 query: GET_LAUNCH,
                 variables: { launchId }
