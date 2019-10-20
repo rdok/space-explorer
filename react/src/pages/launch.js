@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 import { Loading, Header, LaunchDetail } from '../components'
-import { ActionButton } from '../containers
+import { ActionButton } from '../containers'
 
 import { LAUNCH_TILE_DATA } from './launches'
 
