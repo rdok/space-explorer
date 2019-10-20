@@ -60,7 +60,7 @@ type User {
 
 type Mission {
     name: String
-    missionPatch(size: PatchSize): String
+    missionPatch(mission: String, size: PatchSize): String
 }
 
 enum PatchSize {

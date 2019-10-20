@@ -23,5 +23,24 @@ module.exports = {
         },
         launch: (_, { id }, { dataSources }) => dataSources.launchAPI.getLaunchById({ launchId: id }),
         me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser()
+    },
+    Mission: {
+        missionPatch: (mission, { size } = { size: 'LARGE' }) => {
+            return size === 'SMALL' 
+                ? mission.missionPatchSmall : mission.missionPatchLarge
+        }
+    },
+    Launch: {
+        isBooked: async (launch, _, { dataSources }) =>
+            dataSource.userAPI.isBookedOnLaunch({ launchId: launch.id })
+    },
+    User: {
+        trips: async (_, __, { dataSources }) => {
+            const launchIds = await dataSources.userAPI.getLaunchIdsByUser()
+
+        if ( ! launchIds.lenth ) return []
+
+        return ( dataSources.launchAPI.getLaunchesByIds({ launchIds }) || [])
+        }
     }
 }
