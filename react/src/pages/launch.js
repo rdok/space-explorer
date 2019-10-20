@@ -2,18 +2,19 @@ import React, { Fragment } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
+import { LAUNCH_TILE_DATA } from './launches'
 import { Loading, Header, LaunchDetail } from '../components'
 import { ActionButton } from '../containers'
 
-import { LAUNCH_TILE_DATA } from './launches'
 
 export const GET_LAUNCH_DETAILS = gql`
     query LaunchDetails($launchId: ID!) {
         launch(id: $launchId) {
             isInCart @client
             site
-            isBooked
-            rocket { id name type }
+            rocket { 
+                type
+            }
             ...LaunchTile
         }
     }
@@ -34,7 +35,7 @@ export default function Launch({ launchId }) {
                 {data.launch.mission.name}
             </Header>
             <LaunchDetail { ...data.launch } />
-            <ActionDetail { ...data.launch } />
+            <ActionButton { ...data.launch } />
         </Fragment>
     )
 }
