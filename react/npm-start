@@ -1,0 +1,10 @@
+#!/bin/sh
+
+docker run --rm -it \
+    --publish 3000:3000 \
+    --volume $(pwd):/app \
+    --workdir /app \
+    --user $(id -u) \
+    --network node \
+    node:12-alpine \
+    npm start
