@@ -1,0 +1,58 @@
+pipeline {
+    agent { label "rdok.dev" }
+    triggers { cron('H H(18-19) * * *') }
+    options { buildDiscarder( logRotator( numToKeepStr: '30' ) ) }
+    environment {
+        VIRTUAL_HOST = 'space-explorer.rdok.dev'
+        VIRTUAL_PORT = '3006'
+        LETSENCRYPT_HOST = 'space-explorer.rdok.dev'
+        LETSENCRYPT_EMAIL = credentials('rdok-email')
+        DEFAULT_EMAIL = credentials('rdok-email')
+    }
+    stages {
+        stage('Test') { steps {
+            sh '''
+            docker run -e CI=true --rm -v $(pwd):/app -w /app node:12-alpine \
+                sh -c \
+                    "yarn install; yarn run test  --coverage --coverageDirectory='./report' --ci"
+                    '''
+        } }
+        stage('Deploy') {
+            agent { label "rdok.dev" }
+            steps { sh '''
+            docker run --rm -v jenkinsrdokdev_jenkins.rdok.dev:"$JENKINS_HOME" \
+                -w "$WORKSPACE" node:12-alpine sh -c \
+                "yarn install; yarn run build"
+                docker-compose build --pull
+                docker-compose down --remove-orphans
+                docker-compose up -d
+                ''' }
+        }
+        stage('Health Check') { 
+            agent { label "linux" }
+            steps { 
+                retry(10) { 
+                    sleep time: 6, unit: 'SECONDS'
+                    sh '''
+                    response=$(curl 'https://space-explorer.rdok.dev/' -H 'Accept: text/html')
+                    expected='<title>Launches</title>'
+                    test "${response#*$expected}" != "$response" \
+                    || error "Failed asserting the Space Explorer react loads correctly"
+                    '''
+                }
+            } }
+    }
+    post {
+        failure {
+            slackSend color: '#FF0000',
+            message: "@here Failed: <${env.BUILD_URL}console | ${env.JOB_BASE_NAME}#${env.BUILD_NUMBER}>"
+        }
+        fixed {
+            slackSend color: 'good',
+            message: "@here Fixed: <${env.BUILD_URL}console | ${env.JOB_BASE_NAME}#${env.BUILD_NUMBER}>"
+        }
+        success {
+            slackSend message: "Stable: <${env.BUILD_URL}console | ${env.JOB_BASE_NAME}#${env.BUILD_NUMBER}>"
+        }
+    }
+}
