@@ -62,7 +62,7 @@ pipeline {
             keepAll: false,
             reportFiles: 'index.html',
             reportName: 'Coverage Report',
-            reportDir: 'report/lcov-report/'
+            reportDir: 'react/report/lcov-report/'
             ])
         }
     }
