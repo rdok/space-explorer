@@ -19,14 +19,14 @@ pipeline {
         } } } }
         stage('Deploy') {
             agent { label "rdok.dev" }
-            steps { dir('react') ansiColor('xterm') { { sh '''
+            steps { dir('react') { ansiColor('xterm') { sh '''
                 docker run --rm -v jenkinsrdokdev_jenkins.rdok.dev:"$JENKINS_HOME" \
                     -w "$WORKSPACE/react" node:12-alpine sh -c \
                     "yarn install; yarn run build"
                 docker-compose build --pull
                 docker-compose down --remove-orphans
                 docker-compose up -d
-                ''' 
+                '''
             } } }
         }
         stage('Health Check') { 
