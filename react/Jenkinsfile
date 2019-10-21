@@ -20,9 +20,9 @@ pipeline {
         stage('Deploy') {
             agent { label "rdok.dev" }
             steps { dir('react') { ansiColor('xterm') { sh '''
-                docker run --rm -v jenkinsrdokdev_jenkins.rdok.dev:"$JENKINS_HOME" \
-                    -w "$WORKSPACE/react" node:12-alpine sh -c \
-                    "yarn install; yarn run build"
+            docker run --rm -v jenkinsrdokdev_jenkins.rdok.dev:"$JENKINS_HOME" \
+                -w "$WORKSPACE/react" node:12-alpine sh -c \
+                "yarn install; yarn run build"
                 docker-compose build --pull
                 docker-compose down --remove-orphans
                 docker-compose up -d
@@ -54,6 +54,16 @@ pipeline {
         }
         success {
             slackSend message: "Stable: <${env.BUILD_URL}console | ${env.JOB_BASE_NAME}#${env.BUILD_NUMBER}>"
+        }
+        always {
+            publishHTML([
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: false,
+            reportFiles: 'index.html',
+            reportName: 'Coverage Report',
+            reportDir: 'report/lcov-report/'
+            ])
         }
     }
 }
