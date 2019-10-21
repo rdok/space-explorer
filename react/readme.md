@@ -2,10 +2,10 @@
 > Prerequisite: Docker
 
 Start local react app
-$ `./npm start`
+$ `./npm-start`
 
-Install npm packages
-$ `./npmi {package-name} {etc-args}`
+Install yarn packages
+$ `./node yarn {package-name} {etc-args}`
 
 Tests
-$ `./npmi run test`
+$ `./node yarn run test`
