@@ -1,5 +1,5 @@
 pipeline {
-    agent { label "rdok.dev" }
+    agent { label "linux" }
     triggers { cron('H H(18-19) * * *') }
     options { buildDiscarder( logRotator( numToKeepStr: '30' ) ) }
     environment {
@@ -10,7 +10,7 @@ pipeline {
         DEFAULT_EMAIL = credentials('rdok-email')
     }
     stages {
-        stage('Test') { steps {
+        stage('Test') { steps { dir('react') { ansiColor('xterm') {
             sh '''
             docker run -e CI=true --rm -v $(pwd):/app -w /app node:12-alpine \
                 sh -c \
@@ -19,14 +19,15 @@ pipeline {
         } }
         stage('Deploy') {
             agent { label "rdok.dev" }
-            steps { sh '''
+            steps { dir('react') { sh '''
             docker run --rm -v jenkinsrdokdev_jenkins.rdok.dev:"$JENKINS_HOME" \
                 -w "$WORKSPACE" node:12-alpine sh -c \
                 "yarn install; yarn run build"
                 docker-compose build --pull
                 docker-compose down --remove-orphans
                 docker-compose up -d
-                ''' }
+                ''' 
+            } }
         }
         stage('Health Check') { 
             agent { label "linux" }
