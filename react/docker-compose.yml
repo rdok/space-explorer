@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+
+  space-explorer.rdok.dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - VIRTUAL_HOST
+      - VIRTUAL_PORT
+      - LETSENCRYPT_HOST
+      - LETSENCRYPT_EMAIL
+    ports:
+      - "${VIRTUAL_PORT}:4000"
+
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

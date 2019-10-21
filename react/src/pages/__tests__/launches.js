@@ -30,20 +30,18 @@ describe('Launches Page', () => {
 
     it('renders launches', async () => {
         const cache = new InMemoryCache({ addTypename: false })
-        const mocks = [
-            {
-                request: { query: GET_LAUNCHES },
-                result: {
-                    data: {
-                        launches: {
-                            cursor: '123',
-                            hasMore: true,
-                            launches: [mockLaunch]
-                        }
+        const mocks = [ {
+            request: { query: GET_LAUNCHES },
+            result: {
+                data: {
+                    launches: {
+                        cursor: '123',
+                        hasMore: true,
+                        launches: [mockLaunch]
                     }
                 }
             }
-        ]
+        } ]
 
         const { getByText } = await renderApollo(<Launches />, { mocks, cache })
 

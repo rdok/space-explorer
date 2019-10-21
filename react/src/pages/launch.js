@@ -6,7 +6,6 @@ import { LAUNCH_TILE_DATA } from './launches'
 import { Loading, Header, LaunchDetail } from '../components'
 import { ActionButton } from '../containers'
 
-
 export const GET_LAUNCH_DETAILS = gql`
     query LaunchDetails($launchId: ID!) {
         launch(id: $launchId) {
