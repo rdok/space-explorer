@@ -16,7 +16,7 @@ pipeline {
                 sh -c \
                     "yarn install; yarn run test  --coverage --coverageDirectory='./report' --ci"
                     '''
-        } }
+        } } } }
         stage('Deploy') {
             agent { label "rdok.dev" }
             steps { dir('react') { sh '''
