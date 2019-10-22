@@ -86,3 +86,33 @@ describe('[Mutation.cancelTrip', () => {
         expect( response.success ).toBeFalsy()
     })
 })
+
+describe('[Mutation.login]', () => {
+    const { findOrCreateUser } = mockedContext.dataSources.userAPI
+
+    it('returns a base64 email upon successful login', async() => {
+        findOrCreateUser.mockReturnValueOnce(true)
+
+        const args = { email: 'apollo-17@moon.space' }
+        const emailBuffer = new Buffer(mockedContext.user.email)
+        const base64Email = emailBuffer.toString('base64')
+
+        const response = await resolvers
+            .Mutation.login(null, args, mockedContext)
+
+        expect( response ).toEqual( 'YXBvbGxvLTE3QG1vb24uc3BhY2U=' )
+
+        expect( findOrCreateUser ).toBeCalledWith( args )
+    })
+
+    it('returns nothing if login fails', async() => {
+        const args = { email: 'apollo-18@moon.space' }
+         
+        findOrCreateUser.mockReturnValueOnce(false)
+
+        const response = await resolvers
+            .Mutation.login(null, args, mockedContext)
+        
+        expect(response).toBeFalsy()
+    })
+})
