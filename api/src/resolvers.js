@@ -14,10 +14,11 @@ module.exports = {
             return { 
                 launches,
                 cursor: launches.length 
-                ? launches[launches.length - 1].cursor : null,        
+                    ? launches[launches.length - 1].cursor : null,        
                 hasMore: launches.length 
-                ? launches[launches.length - 1].cursor !== allLaunches[allLaunches.length - 1].cursor          
-                : false      
+                    ? (launches[launches.length - 1].cursor 
+                        !== allLaunches[allLaunches.length - 1].cursor)
+                    : false      
             }
         },
         launch: (_, { id }, { dataSources }) => dataSources.launchAPI.getLaunchById({ launchId: id }),
