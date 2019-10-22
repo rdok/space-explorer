@@ -6,4 +6,4 @@ docker run --rm -it \
     --user $(id -u) \
     --network node \
     node:12-alpine \
-    npx $@
+    $@
