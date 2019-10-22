@@ -37,4 +37,18 @@ describe('[Mutation.bookTrips]', () => {
 
         expect( bookTrips ).toBeCalledWith( { launchIds: [ 1972 ] } )
     })
+
+    it('may identify if a trip booking failed', async () => {
+        bookTrips.mockReturnValueOnce([])
+
+        const bookedTrips = await resolvers.Mutation.bookTrips(
+            null, { launchIds: [ 1972 ] }, mockedContext
+        )
+
+        expect(bookedTrips.message).toBeDefined()
+        expect(bookedTrips.message).toEqual(
+            `the following launches couldn't be booked: 1972`
+        )
+        expect(bookedTrips.success).toBeFalsy()
+    })
 })
