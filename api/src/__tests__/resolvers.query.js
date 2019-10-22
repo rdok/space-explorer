@@ -86,16 +86,45 @@ describe('[Query.launch]', () => {
             launchAPI: { getLaunchById: jest.fn() }
         }
     }
+
     const getLaunchById = mockedContext.dataSources.launchAPI.getLaunchById
 
     it('it gets the launch by it\'s id', async() => {
-        getLaunchById.mockReturnValueOnce({ id: 2077 })
 
-        expect( getLaunchById ).toBeCalledWith( { launchId: 2077 } )
+        getLaunchById.mockReturnValueOnce({ id: 2077 })
 
         const launch = await resolvers
             .Query.launch(null, { id: 2077 }, mockedContext)
 
+        expect( getLaunchById ).toBeCalledWith( { launchId: 2077 } )
         expect( launch ).toEqual( { id: 2077 } )
+    })
+})
+
+describe('[Query.me]', () => {
+    const mockedContext = {
+        dataSources: {
+            userAPI: { findOrCreateUser: jest.fn() }
+        },
+        user: {}
+    }
+
+    it('may identify if no user is in context', async() => {
+        const user = await resolvers.Query.me(null, null, mockedContext)
+
+        expect(user).toBeFalsy()
+    })
+
+    it('may return the current user from userAPI', async () => {
+        mockedContext.user.email = '2077@cyberpunk.net'
+
+        const findOrCreateUser = mockedContext
+            .dataSources.userAPI.findOrCreateUser
+
+        findOrCreateUser.mockReturnValueOnce( { id: 2077 } )
+
+        const user = await resolvers.Query.me(null, null, mockedContext)
+
+        expect( user ).toEqual( { id: 2077 } )
     })
 })
