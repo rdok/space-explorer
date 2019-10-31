@@ -6,6 +6,5 @@ docker run --rm -it \
     --volume $(pwd):/app \
     --workdir /app \
     --user $(id -u) \
-    --network node \
     node:12-alpine \
     npm $@
