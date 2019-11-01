@@ -1,23 +1,25 @@
 const resolvers = require('../resolvers')
 
-const mockedMission = {
+const mockMission = {
     name: 'foo',
     missionPatchLarge: 'LG',
-    missionPatchSmall: 'SM'
+    missionPatchSmall: 'SM',
 }
 
 describe('[Mission.missionPatch]', () => {
 
-    it('chooses the right sized patch', () => {
-        const { missionPatch } = resolvers.Mission
+    it('chooses the right sized patch',() => {
         
-        const defaultSize = missionPatch( mockedMission )
-        const smallSize = missionPatch( mockedMission, { size: 'SMALL' } )
-        const largeSize = missionPatch( mockedMission, { size: 'LARGE' } )
+        const { missionPatch } = resolvers.Mission
 
-        expect( defaultSize ).toEqual( 'LG' )
-        expect( smallSize ).toEqual( 'SM' )
-        expect( largeSize ).toEqual( 'LG' )
+        const defaultResponse = missionPatch(mockMission)
+        expect( defaultResponse ).toEqual('LG')
+
+        const smallResponse = missionPatch(mockMission, { size: 'SMALL' } )
+        expect( smallResponse ).toEqual('SM')
+
+        const largeResponse = missionPatch(mockMission, { size: 'LARGE' } )
+        expect( largeResponse ).toEqual('LG')
     })
-
 })
+

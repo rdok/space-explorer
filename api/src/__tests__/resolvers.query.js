@@ -1,81 +1,81 @@
 const resolvers = require('../resolvers')
 
 describe('[Query.launches]', () => {
+
     const mockedContext = {
-        dataSources: {
-            launchAPI: { getAllLaunches: jest.fn() }
+        dataSources: { 
+            launchAPI: { getAll: jest.fn() }
         }
     }
 
-    const { getAllLaunches } = mockedContext.dataSources.launchAPI
+    const { getAll } = mockedContext.dataSources.launchAPI
 
-    it('gets launches, in reversed order', async() => {
-        getAllLaunches.mockReturnValueOnce( [ { id: 999, cursor: 'foo' } ] )
+    it('queries launches', async() => {
 
-        const launches = await resolvers.Query.launches( null, {}, mockedContext )
+        getAll.mockReturnValueOnce( [ { id: 999, cursor: 'foo' } ] )
 
-        expect( launches ).toEqual({
+        const response = await resolvers.Query.launches( null, {}, mockedContext )
+
+        expect( response ).toEqual({
             cursor: 'foo',
             hasMore: false,
             launches: [ { id: 999, cursor: 'foo' } ]
         })
     })
 
-    it('respects the page size', async() => {
-        getAllLaunches.mockReturnValueOnce([
-            { id: 2077, cursor: 'cyberpunk' },
-            { id: 2019, cursor: 'now' },
+    it('respects pagination size', async() => {
+        getAll.mockReturnValue([
+            { id: 1975, cursor: 'Project Apollo' },
+            { id: 2018, cursor: 'Falcon Heavy maiden flight' }
         ])
 
-        const launches = await resolvers.Query.launches(
-            null,
-            { pageSize: 1 },
-            mockedContext
+        const response = await resolvers.Query.launches(
+            null, { pageSize: 1 }, mockedContext
         )
 
-        expect( launches ).toEqual({
-            cursor: 'now',
+        expect( response ).toEqual({
+            cursor: 'Falcon Heavy maiden flight',
             hasMore: true,
-            launches: [ { id: 2019, cursor: 'now' } ]
+            launches: [ { id: 2018, cursor: 'Falcon Heavy maiden flight'} ]
         })
     })
 
-    it('respects the launch cursor', async() => {
-        getAllLaunches.mockReturnValueOnce([
-            { id: 2019, cursor: 'now' },
-            { id: 2077, cursor: 'cyberpunk' },
+    it('respects the cursor', async() => {
+        getAll.mockReturnValueOnce([
+            { id: 1975, cursor: 'Project Apollo' },
+            { id: 2018, cursor: 'Falcon Heavy maiden flight' }
         ])
 
-        const launches = await resolvers.Query.launches(
+        const response = await resolvers.Query.launches(
             null,
-            { after: 'cyberpunk' },
+            { after: 'Falcon Heavy maiden flight' }, 
             mockedContext
         )
 
-        expect( launches ).toEqual({
+        expect( response ).toEqual({
             hasMore: false,
-            cursor: 'now',
-            launches: [ { id: 2019, cursor: 'now' } ]
+            cursor: 'Project Apollo',
+            launches: [ { id: 1975, cursor: 'Project Apollo' } ]
         })
     })
 
-    it('respects both mission page size and mission cursor', async() => {
-        getAllLaunches.mockReturnValueOnce([
-            { id: 2019, cursor: 'now' },
-            { id: 2077, cursor: 'cyberpunk' },
-            { id: 2020, cursor: 'tomorrow' },
+    it('respects both the cursor and page size', async() => {
+        getAll.mockReturnValue([
+            { id: 1975, cursor: 'Project Apollo' },
+            { id: 2018, cursor: 'Falcon Heavy maiden flight' },
+            { id: 2019, cursor: 'NASA cargo resupply to ISS' }
         ])
 
-        const launches = await resolvers.Query.launches(
+        const response = await resolvers.Query.launches(
             null,
-            { after: 'tomorrow', pageSize: 1 },
+            { after: 'NASA cargo resupply to ISS', pageSize: 1 },
             mockedContext
         )
 
-        expect( launches ).toEqual({
+        expect( response ).toEqual({
+            cursor: 'Falcon Heavy maiden flight',
             hasMore: true,
-            cursor: 'cyberpunk',
-            launches: [ { id: 2077, cursor: 'cyberpunk' } ]
+            launches: [ { id: 2018, cursor: 'Falcon Heavy maiden flight'} ]
         })
     })
 })
@@ -83,48 +83,42 @@ describe('[Query.launches]', () => {
 describe('[Query.launch]', () => {
     const mockedContext = {
         dataSources: {
-            launchAPI: { getLaunchById: jest.fn() }
+            launchAPI: { getLaunchById: jest.fn() } 
         }
     }
 
-    const getLaunchById = mockedContext.dataSources.launchAPI.getLaunchById
+    it('queries a launch by its id', async () => {
+        const getLaunchById = mockedContext.dataSources.launchAPI.getLaunchById
+        getLaunchById.mockReturnValueOnce({ id: 1975 })
 
-    it('it gets the launch by it\'s id', async() => {
+        const response = await resolvers.Query.launch( null, { id: 1975 }, mockedContext )
 
-        getLaunchById.mockReturnValueOnce({ id: 2077 })
+        expect( response ).toEqual( { id: 1975 } )
 
-        const launch = await resolvers
-            .Query.launch(null, { id: 2077 }, mockedContext)
-
-        expect( getLaunchById ).toBeCalledWith( { launchId: 2077 } )
-        expect( launch ).toEqual( { id: 2077 } )
+        expect( getLaunchById ).toBeCalledWith( { launchId: 1975 } )
     })
 })
 
 describe('[Query.me]', () => {
-    const mockedContext = {
+    const mockedContext = { 
         dataSources: {
             userAPI: { findOrCreateUser: jest.fn() }
         },
         user: {}
     }
 
-    it('may identify if no user is in context', async() => {
-        const user = await resolvers.Query.me(null, null, mockedContext)
-
-        expect(user).toBeFalsy()
+    it('may identify if no user was found in context', async() => {
+        expect( await resolvers.Query.me(null, null, mockedContext ) ).toBeFalsy()
     })
 
-    it('may return the current user from userAPI', async () => {
-        mockedContext.user.email = '2077@cyberpunk.net'
+    it('may return the user from userAPI', async() => {
+        mockedContext.user.email = 'man@ship.space'
 
-        const findOrCreateUser = mockedContext
-            .dataSources.userAPI.findOrCreateUser
+        mockedContext.dataSources.userAPI.findOrCreateUser
+            .mockReturnValueOnce( { id: 1975 } )
 
-        findOrCreateUser.mockReturnValueOnce( { id: 2077 } )
+        const response = await resolvers.Query.me(null, null, mockedContext )
 
-        const user = await resolvers.Query.me(null, null, mockedContext)
-
-        expect( user ).toEqual( { id: 2077 } )
+        expect( response ).toEqual( { id: 1975 } )
     })
 })
