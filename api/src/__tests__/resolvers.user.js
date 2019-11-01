@@ -4,30 +4,28 @@ describe('[User.trips]', () => {
     const mockContext = {
         dataSources: {
             userAPI: { getLaunchIdsByUser: jest.fn() },
-            launchAPI: { getLaunchesByIds: jest.fn() } 
-        }
+            launchAPI: { getLaunchesByIds: jest.fn() },
+        },
+        user: { id: 1 }
     }
 
     const { getLaunchIdsByUser } = mockContext.dataSources.userAPI
     const { getLaunchesByIds } = mockContext.dataSources.launchAPI
 
-    it('gets the users trips', async() => {
-        getLaunchIdsByUser.mockReturnValueOnce([ 999 ])
-        getLaunchesByIds.mockReturnValueOnce([ { id: 999 } ])
+    it('uses user id from context to lookup trips', async() => {
+        getLaunchIdsByUser.mockReturnValueOnce( [ 1975 ] )
+        getLaunchesByIds.mockReturnValueOnce( [ { id: 1975 } ] )
 
-        const trips = await resolvers.User.trips( null, null, mockContext )
-
-        expect( getLaunchIdsByUser ).toBeCalled()
-        expect( getLaunchesByIds ).toBeCalledWith( { launchIds: [ 999 ] } )
-        expect( trips ).toEqual( [ { id: 999 } ] )
+        const response = await resolvers.User.trips(null, null, mockContext)
+        expect(response).toEqual( [ { id: 1975 } ] )
     })
 
-    it('gets an emty array of trips if no launches were found', async () => {
-        getLaunchIdsByUser.mockReturnValue([])
-        getLaunchesByIds.mockReturnValue([])
+    it('returns empty array if no response', async() => {
+        getLaunchIdsByUser.mockReturnValueOnce([])
+        getLaunchesByIds.mockReturnValueOnce([])
 
-        const trips = await resolvers.User.trips(null, null, mockContext)
+        const response = await resolvers.User.trips(null, null, mockContext)
 
-        expect( trips ).toEqual([]) 
+        expect( response ).toEqual( [ ] )
     })
 })

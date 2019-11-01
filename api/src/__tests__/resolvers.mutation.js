@@ -1,85 +1,86 @@
 const resolvers = require('../resolvers')
 
-const mockedContext = {
-    dataSources:  {
-        userAPI: {
+const context = { 
+    dataSources: { 
+        userAPI: { 
             bookTrips: jest.fn(),
             cancelTrip: jest.fn(),
             findOrCreateUser: jest.fn()
         },
-        launchAPI: {
+        launchAPI: { 
             getLaunchesByIds: jest.fn(),
-            getLaunchById: jest.fn()
+            getLaunchById: jest.fn() ,
         }
     },
-    user: { id: 1972, email: 'apollo17@moon.space' }
+    user: { id: 2077, email: 'cyberpunk@2077.moon' }
 }
 
-describe('[Mutation.bookTrips]', () => {
-    const { bookTrips } = mockedContext.dataSources.userAPI
-    const { getLaunchesByIds } = mockedContext.dataSources.launchAPI
+const { bookTrips } = context.dataSources.userAPI
+const { getLaunchesByIds } = context.dataSources.launchAPI
+const { cancelTrip } = context.dataSources.userAPI
+const { getLaunchById } = context.dataSources.launchAPI
+const { findOrCreateUser } = context.dataSources.userAPI
 
-    it('may handle successfully trip booking', async () => {
-        bookTrips.mockReturnValueOnce( [ { launchId: 1972 } ] )
+
+describe('[Mutation.bookTrips]', () => { 
+
+    it('successfully books a trip', async () => {
+
+        bookTrips.mockReturnValueOnce( [ { launchId: 1975 } ] )
 
         getLaunchesByIds
-            .mockReturnValueOnce( [ { id: 1972, cursor: 'apollo-csm-114' } ] )
+            .mockReturnValueOnce( [ { id: 1975, cursor: 'Project Apollo' } ] )
 
         const response = await resolvers.Mutation.bookTrips(
-            null, { launchIds: [ 1972 ] }, mockedContext
+            null, { launchIds: [ 1973 ] }, context
         )
 
-        expect( response ).toEqual( { 
-            launches: [ { cursor: 'apollo-csm-114', id: 1972 } ],
+        expect( response ).toEqual({
+            launches: [ { cursor: 'Project Apollo', id: 1975 } ],
             message: 'trips booked successfully',
             success: true
-        } )
-
-        expect( bookTrips ).toBeCalledWith( { launchIds: [ 1972 ] } )
+        })
     })
 
-    it('may handle faled trip booking', async () => {
-        bookTrips.mockReturnValueOnce([])
+    it('may handle a failed booking trip', async () => {
+
+        bookTrips.mockReturnValueOnce( [] )
 
         const response = await resolvers.Mutation.bookTrips(
-            null, { launchIds: [ 1972 ] }, mockedContext
+            null, { launchIds: [ 2077 ] }, context
         )
 
-        expect(response.message).toBeDefined()
-        expect(response.message).toEqual(
-            `the following launches couldn't be booked: 1972`
-        )
-        expect(response.success).toBeFalsy()
+        expect( response.message )
+            .toEqual("the following launches couldn't be booked: 2077")
+        expect( response.success ).toBeFalsy()
     })
 })
 
-describe('[Mutation.cancelTrip', () => {
-    const { cancelTrip } = mockedContext.dataSources.userAPI
-    const { getLaunchById } = mockedContext.dataSources.launchAPI
+describe('[Mutation.cancelTrip]', () => {
 
-    it('may handle successfull trip cancelation', async() => {
-        cancelTrip.mockReturnValueOnce(true)
+    it('may cancel a booking', async () => {
+        cancelTrip.mockReturnValueOnce( true )
         getLaunchById
-            .mockReturnValueOnce( { id: 1968, cursor: 'apollo-8' } )
+            .mockReturnValueOnce( { id: 2077, cursor: 'Cyberpunk' } )
 
         const response = await resolvers.Mutation.cancelTrip(
-            null, { launchId: 1972 }, mockedContext
+            null, { launchId: 2049 }, context
         )
 
         expect( response ).toEqual({
             success: true,
             message: 'trip canceled',
-            launches: [ { id: 1968, cursor: 'apollo-8' } ]
+            launches: [ { id: 2077, cursor: 'Cyberpunk' } ]
         })
 
-        expect( cancelTrip ).toBeCalledWith( { launchId: 1972 } )
+        expect( cancelTrip ).toBeCalledWith( { launchId: 2049 } )
     })
 
-    it('may handle failed trip cancelation', async() => {
+    it('may handle a failed booking cancelation', async () => {
         cancelTrip.mockReturnValueOnce(false)
 
         const response = await resolvers.Mutation.cancelTrip(
-            null, { launchId: 1972 }, mockedContext
+            null, { launchId: 2049 }, context 
         )
 
         expect( response.message ).toEqual('failed to cancel trip')
@@ -88,31 +89,23 @@ describe('[Mutation.cancelTrip', () => {
 })
 
 describe('[Mutation.login]', () => {
-    const { findOrCreateUser } = mockedContext.dataSources.userAPI
 
-    it('returns a base64 email upon successful login', async() => {
+    it('may successfully login a user', async () => {
+        const args = { email: 'cyberpunk@2077.moon' }
+
         findOrCreateUser.mockReturnValueOnce(true)
 
-        const args = { email: 'apollo-17@moon.space' }
-        const emailBuffer = new Buffer(mockedContext.user.email)
-        const base64Email = emailBuffer.toString('base64')
+        const response = await resolvers.Mutation.login(null, args, context)
 
-        const response = await resolvers
-            .Mutation.login(null, args, mockedContext)
-
-        expect( response ).toEqual( 'YXBvbGxvLTE3QG1vb24uc3BhY2U=' )
-
-        expect( findOrCreateUser ).toBeCalledWith( args )
+        expect( response ).toEqual('Y3liZXJwdW5rQDIwNzcubW9vbg==')
     })
 
-    it('returns nothing if login fails', async() => {
-        const args = { email: 'apollo-18@moon.space' }
-         
-        findOrCreateUser.mockReturnValueOnce(false)
+    it('may handle failed logins', async () => {
+        const args = { email: 'anonymous@dark.net' }
+        findOrCreateUser.mockReturnValueOnce( false )
 
-        const response = await resolvers
-            .Mutation.login(null, args, mockedContext)
-        
-        expect(response).toBeFalsy()
+        const response = await resolvers.Mutation.login(null, args, context)
+
+        expect( response ).toBeFalsy()
     })
 })
