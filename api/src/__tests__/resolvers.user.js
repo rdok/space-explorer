@@ -19,4 +19,13 @@ describe('[User.trips]', () => {
         const response = await resolvers.User.trips(null, null, mockContext)
         expect(response).toEqual( [ { id: 1975 } ] )
     })
+
+    it('returns empty array if no response', async() => {
+        getLaunchIdsByUser.mockReturnValueOnce([])
+        getLaunchesByIds.mockReturnValueOnce([])
+
+        const response = await resolvers.User.trips(null, null, mockContext)
+
+        expect( response ).toEqual( [ ] )
+    })
 })
