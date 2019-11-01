@@ -7,6 +7,7 @@ const mockMission = {
 }
 
 describe('[Mission.missionPatch]', () => {
+
     it('chooses the right sized patch',() => {
         
         const { missionPatch } = resolvers.Mission
