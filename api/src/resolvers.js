@@ -3,7 +3,7 @@ const { paginateResults } = require('./utils')
 module.exports = {
     Query: {
         launches: async (_, { pageSize = 20, after }, { dataSources }) => {
-            const allLaunches = await dataSources.launchAPI.getAllLaunches();
+            const allLaunches = await dataSources.launchAPI.getAll();
 
             allLaunches.reverse();
 

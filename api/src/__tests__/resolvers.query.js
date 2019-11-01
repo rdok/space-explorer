@@ -4,15 +4,15 @@ describe('[Query.launches]', () => {
 
     const mockedContext = {
         dataSources: { 
-            launchAPI: { getAllLaunches: jest.fn() }
+            launchAPI: { getAll: jest.fn() }
         }
     }
 
-    const { getAllLaunches } = mockedContext.dataSources.launchAPI
+    const { getAll } = mockedContext.dataSources.launchAPI
 
     it('queries launches', async() => {
 
-        getAllLaunches.mockReturnValueOnce( [ { id: 999, cursor: 'foo' } ] )
+        getAll.mockReturnValueOnce( [ { id: 999, cursor: 'foo' } ] )
 
         const response = await resolvers.Query.launches( null, {}, mockedContext )
 
@@ -24,7 +24,7 @@ describe('[Query.launches]', () => {
     })
 
     it('respects pagination size', async() => {
-        getAllLaunches.mockReturnValue([
+        getAll.mockReturnValue([
             { id: 1975, cursor: 'Project Apollo' },
             { id: 2018, cursor: 'Falcon Heavy maiden flight' }
         ])
@@ -41,7 +41,7 @@ describe('[Query.launches]', () => {
     })
 
     it('respects the cursor', async() => {
-        getAllLaunches.mockReturnValueOnce([
+        getAll.mockReturnValueOnce([
             { id: 1975, cursor: 'Project Apollo' },
             { id: 2018, cursor: 'Falcon Heavy maiden flight' }
         ])
@@ -60,7 +60,7 @@ describe('[Query.launches]', () => {
     })
 
     it('respects both the cursor and page size', async() => {
-        getAllLaunches.mockReturnValue([
+        getAll.mockReturnValue([
             { id: 1975, cursor: 'Project Apollo' },
             { id: 2018, cursor: 'Falcon Heavy maiden flight' },
             { id: 2019, cursor: 'NASA cargo resupply to ISS' }
@@ -87,7 +87,7 @@ describe('[Query.launch]', () => {
         }
     }
 
-    it('queries a launch by its id', async() => {
+    it('queries a launch by its id', async () => {
         const getLaunchById = mockedContext.dataSources.launchAPI.getLaunchById
         getLaunchById.mockReturnValueOnce({ id: 1975 })
 
