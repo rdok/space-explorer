@@ -5,17 +5,21 @@ const context = {
         userAPI: { 
             bookTrips: jest.fn(),
             cancelTrip: jest.fn(),
+            findOrCreateUser: jest.fn()
         },
         launchAPI: { 
             getLaunchesByIds: jest.fn(),
             getLaunchById: jest.fn() ,
         }
-    } 
+    },
+    user: { id: 2077, email: 'cyberpunk@2077.moon' }
 }
+
 const { bookTrips } = context.dataSources.userAPI
 const { getLaunchesByIds } = context.dataSources.launchAPI
 const { cancelTrip } = context.dataSources.userAPI
 const { getLaunchById } = context.dataSources.launchAPI
+const { findOrCreateUser } = context.dataSources.userAPI
 
 
 describe('[Mutation.bookTrips]', () => { 
@@ -81,5 +85,27 @@ describe('[Mutation.cancelTrip]', () => {
 
         expect( response.message ).toEqual('failed to cancel trip')
         expect( response.success ).toBeFalsy()
+    })
+})
+
+describe('[Mutation.login]', () => {
+
+    it('may successfully login a user', async () => {
+        const args = { email: 'cyberpunk@2077.moon' }
+
+        findOrCreateUser.mockReturnValueOnce(true)
+
+        const response = await resolvers.Mutation.login(null, args, context)
+
+        expect( response ).toEqual('Y3liZXJwdW5rQDIwNzcubW9vbg==')
+    })
+
+    it('may handle failed logins', async () => {
+        const args = { email: 'anonymous@dark.net' }
+        findOrCreateUser.mockReturnValueOnce( false )
+
+        const response = await resolvers.Mutation.login(null, args, context)
+
+        expect( response ).toBeFalsy()
     })
 })
