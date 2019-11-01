@@ -17,6 +17,6 @@ describe('[User.trips]', () => {
         getLaunchesByIds.mockReturnValueOnce( [ { id: 1975 } ] )
 
         const response = await resolvers.User.trips(null, null, mockContext)
-        expect(response).toEqual( [ { id: 1975 ] )
+        expect(response).toEqual( [ { id: 1975 } ] )
     })
 })
