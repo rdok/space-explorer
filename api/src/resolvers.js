@@ -38,7 +38,7 @@ module.exports = {
         trips: async (_, __, { dataSources }) => {
             const launchIds = await dataSources.userAPI.getLaunchIdsByUser()
 
-        if ( ! launchIds.lenth ) return []
+        if ( ! launchIds.length ) return []
 
         return ( dataSources.launchAPI.getLaunchesByIds({ launchIds }) || [])
         }
