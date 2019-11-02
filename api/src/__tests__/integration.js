@@ -39,10 +39,12 @@ const LOGIN = gql`
 `
 
 const BOOK_TRIPS = gql`
-    mutation BookTrips($launchIds: [ID]!) {
-        success
-        message
-        launches { id isBooked }
+    mutation BookTrips( $launchIds: [ID]! ) {
+       bookTrips( launchIds: $launchIds ) {
+           success
+           message
+           launches { id isBooked }
+       }
     }
 `
 
@@ -107,5 +109,33 @@ describe('Mutations', () => {
       })
 
       expect( response.data.login).toEqual('YXN0ZXJkYW1AYXBvbGxvLm1vb24=')
+   })
+
+   it('books trips', async () => {
+      const { server, launchAPI, userAPI } = constructTestServer({
+         context: () => ( { user: { id: 17, email: 'asterdam@apollo.moon' } } )
+      })
+
+      launchAPI.get = jest.fn()
+
+      launchAPI.get
+         .mockReturnValueOnce( [ rawLaunchResponse ] )
+         .mockReturnValueOnce( [ { ...rawLaunchResponse, flight_number: 2 } ] )
+
+      userAPI.store = mockedStore
+      userAPI.store.trips.findOrCreate
+         .mockReturnValueOnce( [ { get: () => ( { launchId: 1} ) } ] )
+         .mockReturnValueOnce( [ { get: () => ( { launchId: 2} ) } ] )
+
+      userAPI.store.trips.findAll.mockReturnValue( [ {} ] )
+
+      const { mutate } = createTestClient( server )
+
+      const response = await mutate({
+         mutation: BOOK_TRIPS,
+         variables: { launchIds: [ '1', '2' ] }
+      })
+
+      expect( response ).toMatchSnapshot()
    })
 })
