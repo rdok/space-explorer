@@ -23,8 +23,8 @@ module.exports = {
             return { launches, cursor: cursor, hasMore: hasMore }
         },
        launch: (_, { id }, { dataSources }) => 
-         dataSources.launchAPI.getLaunchById({ launchId: id }),
-       me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser()
+         dataSources.launchAPI.getById({ launchId: id }),
+       me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreate()
     },
     Mission: {
         missionPatch: (mission, { size } = { size: 'LARGE' }) => {
@@ -35,25 +35,25 @@ module.exports = {
     },
     Launch: {
         isBooked: async (launch, _, { dataSources }) =>
-            dataSource.userAPI.isBookedOnLaunch({ launchId: launch.id })
+            dataSources.userAPI.hasTrip({ launchId: launch.id })
     },
     User: {
         trips: async (_, __, { dataSources }) => {
-            const launchIds = await dataSources.userAPI.getLaunchIdsByUser()
+            const launchIds = await dataSources.userAPI.getLaunchIds()
 
             if ( ! launchIds.length ) return []
 
-            return dataSources.launchAPI.getLaunchesByIds({ launchIds }) || []
+            return dataSources.launchAPI.getByIds({ launchIds }) || []
         }
     },
     Mutation: {
         login: async (_, { email }, { dataSources }) => {
-            const user = await dataSources.userAPI.findOrCreateUser({ email })
+            const user = await dataSources.userAPI.findOrCreate({ email })
             if ( user ) return Buffer.from(email).toString('base64')
         },
         bookTrips: async (_, { launchIds }, { dataSources }) => {
             const results = await dataSources.userAPI.bookTrips({ launchIds })
-            const launches = await dataSources.launchAPI.getLaunchesByIds({
+            const launches = await dataSources.launchAPI.getByIds({
                 launchIds
             })
 
@@ -75,8 +75,7 @@ module.exports = {
                 }
             }
 
-            const launch = await dataSources.launchAPI
-                .getLaunchById({ launchId })
+            const launch = await dataSources.launchAPI.getById({ launchId })
             
             return {
                 success: true,

@@ -51,9 +51,10 @@ describe('Queries', () => {
 
        expect( true ).toEqual( true)
 
-          /**
         const { server, launchAPI, userAPI } = constructTestServer({
-            context: () => ( { user: { id: 1, email: 'man@apollo.moon' } } )
+           context: () => ( 
+              { user: { id: 17, email: 'asterdam@apollo.moon' } } 
+           )
         })
 
         launchAPI.get = jest.fn( () => [ rawLaunchResponse ] )
@@ -66,6 +67,45 @@ describe('Queries', () => {
         const { query } = createTestClient( server )
         const response = await query( { query: GET_LAUNCHES } )
         expect( response ).toMatchSnapshot();
-        */
     })
+
+   it('fetches single launch', async () => {
+      const { server, launchAPI, userAPI } = constructTestServer( {
+         context: () => ( { user: { id: 17, email: 'asterdam@apollo.moon' } } )
+      } )
+
+      launchAPI.get = jest.fn( () => [ rawLaunchResponse ] )
+      userAPI.store = mockedStore
+      userAPI.store.trips.findAll.mockReturnValueOnce([
+         { dataValues: { launchId: 1 } }
+      ])
+
+      const { query } = createTestClient( server )
+      const response = await query( {
+         query: GET_LAUNCH, variables: { id: 1 } 
+      } )
+
+      expect( response ).toMatchSnapshot()
+   })
+})
+
+describe('Mutations', () => {
+   it('returns login token', async () => { 
+      const { server, launchAPI, userAPI } = constructTestServer({
+         context: () => {}
+      })
+
+      userAPI.store = mockedStore
+      userAPI.store.users.findOrCreate.mockReturnValueOnce([
+         { id: 17, email: 'asterdam@apollo.moon' }
+      ])
+
+      const { mutate } = createTestClient( server )
+      const response = await mutate({ 
+         mutation: LOGIN,
+         variables: { email: 'asterdam@apollo.moon' }
+      })
+
+      expect( response.data.login).toEqual('YXN0ZXJkYW1AYXBvbGxvLm1vb24=')
+   })
 })

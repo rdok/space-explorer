@@ -3,17 +3,17 @@
 exports[`Server - e2e gets a single launch 1`] = `
 Object {
    "data": Object {
-      "launch": Object {
-         "id": "30",
-            "isBooked": false,
-            "mission": Object {
-               "name": "Thaicom 8",
-            },
-            "rocket": Object {
-               "type": "FT",
-            },
-      }
-   }
+     "launch": Object {
+       "id": "30",
+       "isBooked": false,
+       "mission": Object {
+         "name": "Thaicom 8",
+       },
+       "rocket": Object {
+         "type": "FT",
+       },
+     },
+   },
 }
 `;
 
