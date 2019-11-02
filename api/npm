@@ -1,10 +1,8 @@
 #!/bin/sh
 
 docker run --rm -it \
-    --name api-container \
-    --publish 4000:4000 \
     --volume $(pwd):/home/app \
     --workdir /home/app \
     --user $(id -u):$(id -g) \
     node:12-alpine \
-    npm $@
+    npm  $@

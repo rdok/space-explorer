@@ -1,15 +1,23 @@
 const { ApolloServer } = require('apollo-server')
-const typeDefs = require('./schema')
-const { createStore } = require('./utils')
-const resolvers = require('./resolvers')
 const isEmail = require('isemail')
+
+const typeDefs = require('./schema')
+const resolvers = require('./resolvers')
+const { createStore } = require('./utils')
 
 const LaunchAPI = require('./datasources/launch')
 const UserAPI = require('./datasources/user')
 
+const internalEngineDemo = require('./engine-demo')
+
 const store = createStore()
 
-let context = async({ req }) => {
+const dataSources = () => ({
+    launchAPI: new LaunchAPI(),
+    userAPI: new UserAPI( { store } )
+})
+
+let context = async( { req } ) => {
     const auth = req.headers && req.headers.authorization || ''
     const email = Buffer.from(auth, 'base64').toString('ascii')
     if ( !isEmail.validate(email) ) return { user: null }
@@ -19,16 +27,34 @@ let context = async({ req }) => {
 
     return { user: { ...user.dataValues } }
 }
+
 const server = new ApolloServer({ 
-    context: context,
     typeDefs,
     resolvers,
-    dataSources: () => ({
-        launchAPI: new LaunchAPI(),
-        userAPI: new UserAPI({ store })
-    })
+    dataSources,
+    context,
+    engine: {
+        apiKey: process.env.ENGINE_API_KEY,
+        ...internalEngineDemo
+    }
 })
 
-server.listen().then(({ url }) => {
-      console.log(`Server ready at ${url}`);
-})
+
+if( process.env.NODE_ENV !== 'test') {
+    server.listen( { port: 4000 } ).then(({ url }) => {
+          console.log(`Server ready at ${url}`);
+    })
+}
+
+// Used by integration & e2e tests
+module.exports = {
+    dataSources,
+    context,
+    typeDefs,
+    resolvers,
+    ApolloServer,
+    LaunchAPI,
+    UserAPI,
+    store,
+    server
+}

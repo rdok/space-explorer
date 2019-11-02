@@ -11,55 +11,63 @@ module.exports = {
                 after, pageSize, results: allLaunches
             });
 
-            return { 
-                launches,
-                cursor: launches.length 
-                    ? launches[launches.length - 1].cursor : null,        
-                hasMore: launches.length 
-                ? launches[launches.length - 1].cursor !== allLaunches[allLaunches.length - 1].cursor          
-                : false      
-            }
+           let cursor = null
+           let hasMore = false 
+
+           if( launches.length ) {
+              cursor =  launches[launches.length - 1].cursor 
+              hasMore = launches[launches.length - 1].cursor !== 
+                 allLaunches[allLaunches.length - 1].cursor          
+           }
+
+            return { launches, cursor: cursor, hasMore: hasMore }
         },
-        launch: (_, { id }, { dataSources }) => dataSources.launchAPI.getLaunchById({ launchId: id }),
-        me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser()
+       launch: (_, { id }, { dataSources }) => 
+         dataSources.launchAPI.getById({ launchId: id }),
+       me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreate()
     },
     Mission: {
         missionPatch: (mission, { size } = { size: 'LARGE' }) => {
             return size === 'SMALL' 
-                ? mission.missionPatchSmall : mission.missionPatchLarge
+              ? mission.missionPatchSmall 
+              : mission.missionPatchLarge
         }
     },
     Launch: {
         isBooked: async (launch, _, { dataSources }) =>
-            dataSource.userAPI.isBookedOnLaunch({ launchId: launch.id })
+            dataSources.userAPI.hasTrip({ launchId: launch.id })
     },
     User: {
         trips: async (_, __, { dataSources }) => {
-            const launchIds = await dataSources.userAPI.getLaunchIdsByUser()
+            const launchIds = await dataSources.userAPI.getLaunchIds()
 
-        if ( ! launchIds.length ) return []
+            if ( ! launchIds.length ) return []
 
-        return ( dataSources.launchAPI.getLaunchesByIds({ launchIds }) || [])
+            return dataSources.launchAPI.getByIds({ launchIds }) || []
         }
     },
     Mutation: {
         login: async (_, { email }, { dataSources }) => {
-            const user = await dataSources.userAPI.findOrCreateUser({ email })
+            const user = await dataSources.userAPI.findOrCreate({ email })
             if ( user ) return Buffer.from(email).toString('base64')
         },
         bookTrips: async (_, { launchIds }, { dataSources }) => {
             const results = await dataSources.userAPI.bookTrips({ launchIds })
-            const launches = await dataSources.launchAPI.getLaunchesByIds({
+            const launches = await dataSources.launchAPI.getByIds({
                 launchIds
             })
 
-            return {
-                success: results && results.length === launchIds.length,
-                message: results.length === launchIds.length
-                    ? 'trips booked successfully'
-                    : `the following launches couldn't be booked: ${launchIds.filter( id => !results.includes(id) )}`,
-                launches
-            }
+           let message = 'trips booked successfully'
+
+           if( results.length !== launchIds.length ) {
+              message = `the following launches couldn't be booked: ${launchIds.filter( id => !results.includes(id) )}`
+           }
+
+           return {
+              success: results && results.length === launchIds.length,
+              message: message,
+              launches
+           }
         },
         cancelTrip: async (_, { launchId }, { dataSources }) => {
             const result = await dataSources.userAPI.cancelTrip({ launchId })
@@ -71,8 +79,7 @@ module.exports = {
                 }
             }
 
-            const launch = await dataSources.launchAPI
-                .getLaunchById({ launchId })
+            const launch = await dataSources.launchAPI.getById({ launchId })
             
             return {
                 success: true,
