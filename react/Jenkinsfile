@@ -8,6 +8,7 @@ pipeline {
         LETSENCRYPT_HOST = 'space-explorer.rdok.dev'
         LETSENCRYPT_EMAIL = credentials('rdok-email')
         DEFAULT_EMAIL = credentials('rdok-email')
+        GRAPHQL_API_URL = 'https://api.space-explorer.rdok.dev/'
     }
     stages {
         stage('Test') { steps { dir('react') { ansiColor('xterm') {
