@@ -11,22 +11,26 @@ module.exports = {
                 after, pageSize, results: allLaunches
             });
 
-            return { 
-                launches,
-                cursor: launches.length 
-                    ? launches[launches.length - 1].cursor : null,        
-                hasMore: launches.length 
-                ? launches[launches.length - 1].cursor !== allLaunches[allLaunches.length - 1].cursor          
-                : false      
-            }
+           let cursor = null
+           let hasMore = false 
+
+           if( launches.length ) {
+              cursor =  launches[launches.length - 1].cursor 
+              hasMore = launches[launches.length - 1].cursor !== 
+                 allLaunches[allLaunches.length - 1].cursor          
+           }
+
+            return { launches, cursor: cursor, hasMore: hasMore }
         },
-        launch: (_, { id }, { dataSources }) => dataSources.launchAPI.getLaunchById({ launchId: id }),
-        me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser()
+       launch: (_, { id }, { dataSources }) => 
+         dataSources.launchAPI.getLaunchById({ launchId: id }),
+       me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser()
     },
     Mission: {
         missionPatch: (mission, { size } = { size: 'LARGE' }) => {
             return size === 'SMALL' 
-                ? mission.missionPatchSmall : mission.missionPatchLarge
+              ? mission.missionPatchSmall 
+              : mission.missionPatchLarge
         }
     },
     Launch: {
@@ -39,7 +43,7 @@ module.exports = {
 
             if ( ! launchIds.length ) return []
 
-            return ( dataSources.launchAPI.getLaunchesByIds({ launchIds }) || [])
+            return dataSources.launchAPI.getLaunchesByIds({ launchIds }) || []
         }
     },
     Mutation: {
