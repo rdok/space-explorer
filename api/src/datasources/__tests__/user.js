@@ -91,3 +91,27 @@ describe('[UserAPI.cancelTrip]', () => {
             .toBeCalledWith( { where: { userId: 2012, launchId: 1969 } } )
     })
 })
+
+describe('[UserAPI.getLauchIdsByUser]', () => {
+    it('may find the launches of the current user', async () => {
+        const args = { userId: 2012 }
+        const launches = [
+            { dataValues: { launchId: 1969 } },
+            { dataValues: { launchId: 1961 } },
+        ]
+        store.trips.findAll.mockReturnValueOnce( launches )
+
+        const response = await userAPI.getLaunchIdsByUser( args )
+
+        expect( response ).toEqual( [ 1969, 1961 ] )
+        expect( store.trips.findAll ).toBeCalledWith({ where: args })
+    })
+
+    it('handles response with no launches for the current user', async () => {
+        const args = { userId: 2012 }
+
+        const response = await userAPI.getLaunchIdsByUser( args )
+
+        expect( response ).toEqual( [] )
+    })
+})

@@ -2,6 +2,7 @@ const { DataSource } = require('apollo-datasource')
 const isEmail = require('isemail')
 
 class UserAPI extends DataSource {
+
     constructor({ store }) {
         super()
         this.store = store
@@ -60,9 +61,12 @@ class UserAPI extends DataSource {
         const userId = this.context.user.id
         const launches = await this.store.trips.findAll({ where: { userId } })
 
-        return launches && launches.length
-            ? found.map(launch => launch.dataValues.launchId).filter(launch => !!launch)
-            : []
+        if( ! launches || ! launches.length ) {
+            return []
+        }
+
+        return launches.map(launch => launch.dataValues.launchId)
+            .filter(launch => !!launch)
     }
 }
 
