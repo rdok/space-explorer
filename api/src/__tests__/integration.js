@@ -1,10 +1,10 @@
 const { createTestClient } = require('apollo-server-testing')
 const gql = require('graphql-tag')
-// const nock = require('nock')
+const nock = require('nock')
 
-// const { constructTestServer } = require('./__utils')
-// const { mockedLaunchResponse } = require('../datasources/__tests__/launch')
-// const { mockedStore } = require('../datasources/__tests__/user')
+const { constructTestServer } = require('./__utils')
+const { rawLaunchResponse } = require('../datasources/__tests__/launch')
+const { mockedStore } = require('../datasources/__tests__/user')
 
 const GET_LAUNCHES = gql`
     query launchList($after: String) {
@@ -47,17 +47,25 @@ const BOOK_TRIPS = gql`
 `
 
 describe('Queries', () => {
-    it('fetches list of launches', async() => {
-        /**
+    it('fetches all launches', async() => {
+
+       expect( true ).toEqual( true)
+
+          /**
         const { server, launchAPI, userAPI } = constructTestServer({
-            context: () => ( { user: { id: 1, email: 'man@apollo.moon' } }
+            context: () => ( { user: { id: 1, email: 'man@apollo.moon' } } )
         })
 
-        launchAPI.get = jest.fn( () => [ mockedLaunchResponse ] )
+        launchAPI.get = jest.fn( () => [ rawLaunchResponse ] )
+
         userAPI.store = mockedStore
         userAPI.store.trips.findAll.mockReturnValueOnce([
             { dataValues: { launchId: 1 } }
         ])
+
+        const { query } = createTestClient( server )
+        const response = await query( { query: GET_LAUNCHES } )
+        expect( response ).toMatchSnapshot();
         */
     })
 })

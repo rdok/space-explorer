@@ -12,6 +12,8 @@ const store = {
     }
 }
 
+module.exports.mockedStore = store
+
 const userAPI = new UserAPI( { store: store } )
 
 userAPI.initialize( 
