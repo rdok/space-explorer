@@ -14,7 +14,8 @@ describe('[Query.launches]', () => {
 
         getAll.mockReturnValueOnce( [ { id: 999, cursor: 'foo' } ] )
 
-        const response = await resolvers.Query.launches( null, {}, mockedContext )
+       const response = await resolvers.Query
+          .launches( null, {}, mockedContext )
 
         expect( response ).toEqual({
             cursor: 'foo',
@@ -83,26 +84,27 @@ describe('[Query.launches]', () => {
 describe('[Query.launch]', () => {
     const mockedContext = {
         dataSources: {
-            launchAPI: { getLaunchById: jest.fn() } 
+            launchAPI: { getById: jest.fn() } 
         }
     }
 
     it('queries a launch by its id', async () => {
-        const getLaunchById = mockedContext.dataSources.launchAPI.getLaunchById
-        getLaunchById.mockReturnValueOnce({ id: 1975 })
+        const getById = mockedContext.dataSources.launchAPI.getById
+        getById.mockReturnValueOnce({ id: 1975 })
 
-        const response = await resolvers.Query.launch( null, { id: 1975 }, mockedContext )
+       const response = await resolvers.Query
+          .launch( null, { id: 1975 }, mockedContext )
 
         expect( response ).toEqual( { id: 1975 } )
 
-        expect( getLaunchById ).toBeCalledWith( { launchId: 1975 } )
+        expect( getById ).toBeCalledWith( { launchId: 1975 } )
     })
 })
 
 describe('[Query.me]', () => {
     const mockedContext = { 
         dataSources: {
-            userAPI: { findOrCreateUser: jest.fn() }
+            userAPI: { findOrCreate: jest.fn() }
         },
         user: {}
     }
@@ -114,7 +116,7 @@ describe('[Query.me]', () => {
     it('may return the user from userAPI', async() => {
         mockedContext.user.email = 'man@ship.space'
 
-        mockedContext.dataSources.userAPI.findOrCreateUser
+        mockedContext.dataSources.userAPI.findOrCreate
             .mockReturnValueOnce( { id: 1975 } )
 
         const response = await resolvers.Query.me(null, null, mockedContext )

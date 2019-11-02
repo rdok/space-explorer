@@ -2,6 +2,7 @@ const { DataSource } = require('apollo-datasource')
 const isEmail = require('isemail')
 
 class UserAPI extends DataSource {
+
     constructor({ store }) {
         super()
         this.store = store
@@ -11,7 +12,7 @@ class UserAPI extends DataSource {
         this.context = config.context
     }
 
-    async findOrCreateUser({ email: emailArg } = {}) {
+    async findOrCreate({ email: emailArg } = {}) {
         const email = this.context && this.context.user 
             ? this.context.user.email : emailArg
 
@@ -25,9 +26,7 @@ class UserAPI extends DataSource {
     async bookTrips({ launchIds }) {
         const userId = this.context.user.id
 
-        if( ! userId ) {
-            return
-        }
+        if( ! userId ) { return }
 
         let results = []
 
@@ -58,14 +57,31 @@ class UserAPI extends DataSource {
         return !!this.store.trips.destroy({ where: {userId, launchId} })
     }
 
-    async getLaunchIdsByUser() {
+    async getLaunchIds() {
         const userId = this.context.user.id
         const launches = await this.store.trips.findAll({ where: { userId } })
 
-        return launches && launches.length
-            ? found.map(launch => launch.dataValues.launchId).filter(launch => !!launch)
-            : []
+        if( ! launches || ! launches.length ) {
+            return []
+        }
+
+        return launches.map(launch => launch.dataValues.launchId)
+            .filter(launch => !!launch)
     }
+
+   async hasTrip( { launchId }) {
+      if ( ! this.context || ! this.context.user ) {
+         return false
+      }
+
+      const userId = this.context.user.id
+
+      const trips = await this.store.trips.findAll({
+         where: { userId, launchId }
+      })
+
+      return trips && trips.length > 0
+   }
 }
 
 module.exports = UserAPI

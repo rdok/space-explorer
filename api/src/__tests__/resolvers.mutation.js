@@ -5,21 +5,21 @@ const context = {
         userAPI: { 
             bookTrips: jest.fn(),
             cancelTrip: jest.fn(),
-            findOrCreateUser: jest.fn()
+            findOrCreate: jest.fn()
         },
         launchAPI: { 
-            getLaunchesByIds: jest.fn(),
-            getLaunchById: jest.fn() ,
+            getByIds: jest.fn(),
+            getById: jest.fn() ,
         }
     },
     user: { id: 2077, email: 'cyberpunk@2077.moon' }
 }
 
 const { bookTrips } = context.dataSources.userAPI
-const { getLaunchesByIds } = context.dataSources.launchAPI
+const { getByIds } = context.dataSources.launchAPI
 const { cancelTrip } = context.dataSources.userAPI
-const { getLaunchById } = context.dataSources.launchAPI
-const { findOrCreateUser } = context.dataSources.userAPI
+const { getById } = context.dataSources.launchAPI
+const { findOrCreate } = context.dataSources.userAPI
 
 
 describe('[Mutation.bookTrips]', () => { 
@@ -28,7 +28,7 @@ describe('[Mutation.bookTrips]', () => {
 
         bookTrips.mockReturnValueOnce( [ { launchId: 1975 } ] )
 
-        getLaunchesByIds
+        getByIds
             .mockReturnValueOnce( [ { id: 1975, cursor: 'Project Apollo' } ] )
 
         const response = await resolvers.Mutation.bookTrips(
@@ -60,7 +60,7 @@ describe('[Mutation.cancelTrip]', () => {
 
     it('may cancel a booking', async () => {
         cancelTrip.mockReturnValueOnce( true )
-        getLaunchById
+        getById
             .mockReturnValueOnce( { id: 2077, cursor: 'Cyberpunk' } )
 
         const response = await resolvers.Mutation.cancelTrip(
@@ -93,7 +93,7 @@ describe('[Mutation.login]', () => {
     it('may successfully login a user', async () => {
         const args = { email: 'cyberpunk@2077.moon' }
 
-        findOrCreateUser.mockReturnValueOnce(true)
+        findOrCreate.mockReturnValueOnce(true)
 
         const response = await resolvers.Mutation.login(null, args, context)
 
@@ -102,7 +102,7 @@ describe('[Mutation.login]', () => {
 
     it('may handle failed logins', async () => {
         const args = { email: 'anonymous@dark.net' }
-        findOrCreateUser.mockReturnValueOnce( false )
+        findOrCreate.mockReturnValueOnce( false )
 
         const response = await resolvers.Mutation.login(null, args, context)
 
