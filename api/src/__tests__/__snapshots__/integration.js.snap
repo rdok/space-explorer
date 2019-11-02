@@ -7,12 +7,12 @@ Object {
          "launches": Array [
             Object {
                "id": "1",
-                  "isBooked": true,
+               "isBooked": true,
             },
-                   Object {
-                      "id": "2",
-                      "isBooked": true,
-                   },
+             Object {
+                "id": "2",
+                "isBooked": true,
+             },
          ],
          "message": "trips booked successfully",
          "success": true
@@ -30,31 +30,46 @@ Object {
 
 exports[`Queries fetches all launches 1`] = `
 Object {
-   "data": Object {
-      "launches": Object {
-         "cursor": "1143239400",
-            "hasMore": false,
-            "launches": Array [
-               Object {
-                  "id": "1",
-                  "isBooked": true,
-                  "mission": Object {
-                     "missionPatch": "https://images2.imgbox.com/40/e3/GypSkayF_o.png",
-                     "name": "FalconSat",
-                  },
-                  "rocket": Object {
-                     "name": "Falcon 1",
-                  }
-               }
-            ]
-      }
-   },
-      "errors": undefined,
-      "extensions": undefined,
-      "http": Object {
-         "headers": Headers {
-            Symbol(map): Object {}
-         }
-      }
+  "data": Object {
+    "launches": Object {
+      "cursor": "1143239400",
+      "hasMore": false,
+      "launches": Array [
+        Object {
+          "id": "1",
+          "isBooked": true,
+          "mission": Object {
+            "missionPatch": "https://images2.imgbox.com/40/e3/GypSkayF_o.png",
+            "name": "FalconSat",
+          },
+          "rocket": Object {
+            "name": "Falcon 1",
+          },
+        },
+      ],
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Queries fetches single launch 1`] = `
+Object {
+  "data": undefined,
+  "errors": Array [
+    [ValidationError: Variable "$id" of type "ID" used in position expecting type "ID!".],
+  ],
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
 }
 `;

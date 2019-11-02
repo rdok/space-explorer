@@ -18,7 +18,7 @@ const LAUNCH_LIST_QUERY = gql`
 `
 
 const GET_LAUNCH = gql`
-   query launch( $id: ID ) {
+   query launch( $id: ID! ) {
       launch( id: $id ) {
          id
          isBooked
