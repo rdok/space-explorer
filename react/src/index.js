@@ -14,7 +14,7 @@ import injectStyles from './styles'
 
 const cache = new InMemoryCache()
 
-const uri = process.env.GRAPHQL_API_URL || '127.0.0.1:4000/' 
+const uri = process.env.GRAPHQL_API_URL || 'http://localhost:4000/' 
 
 console.log(process.env)
 
