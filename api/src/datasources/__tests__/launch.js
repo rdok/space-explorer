@@ -6,7 +6,7 @@ const launchAPI = new LaunchAPI()
 launchAPI.get = http.get
 
 describe('[LaunchAPI.transform]', () => {
-    it('properly transforms a launch', () => {
+    it('transforms a launch', () => {
         expect( launchAPI.transform( rawLaunchResponse ) )
             .toEqual( transformedLaunch )
     })
@@ -35,7 +35,7 @@ describe('[LaunchAPI.getById]', () => {
 })
 
 describe('[LaunchAPI.getByIds]', () => {
-    it('may fetch many launches by their ids', async () => {
+    it('may get many launches by their ids', async () => {
         const getById = launchAPI.getById
         launchAPI.getById = jest.fn( () => ( { id: 1 } ) )
 
