@@ -2,8 +2,8 @@ const { createTestClient } = require('apollo-server-testing')
 const gql = require('graphql-tag')
 // const nock = require('nock')
 
-const { constructTestServer } = require('./__utils')
-const { mockedLaunchResponse } = require('../datasources/__tests__/launch')
+// const { constructTestServer } = require('./__utils')
+// const { mockedLaunchResponse } = require('../datasources/__tests__/launch')
 // const { mockedStore } = require('../datasources/__tests__/user')
 
 const GET_LAUNCHES = gql`
