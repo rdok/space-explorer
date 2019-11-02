@@ -6,4 +6,4 @@ docker run --rm -it \
     --publish 4000:4000 \
     --user $(id -u):$(id -g) \
     node:12-alpine \
-    npm  $@
+    npm run dev
