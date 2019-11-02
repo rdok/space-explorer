@@ -25,9 +25,7 @@ class UserAPI extends DataSource {
     async bookTrips({ launchIds }) {
         const userId = this.context.user.id
 
-        if( ! userId ) {
-            return
-        }
+        if( ! userId ) { return }
 
         let results = []
 
