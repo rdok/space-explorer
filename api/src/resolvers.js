@@ -57,13 +57,17 @@ module.exports = {
                 launchIds
             })
 
-            return {
-                success: results && results.length === launchIds.length,
-                message: results.length === launchIds.length
-                    ? 'trips booked successfully'
-                    : `the following launches couldn't be booked: ${launchIds.filter( id => !results.includes(id) )}`,
-                launches
-            }
+           let message = 'trips booked successfully'
+
+           if( results.length !== launchIds.length ) {
+              message = `the following launches couldn't be booked: ${launchIds.filter( id => !results.includes(id) )}`
+           }
+
+           return {
+              success: results && results.length === launchIds.length,
+              message: message,
+              launches
+           }
         },
         cancelTrip: async (_, { launchId }, { dataSources }) => {
             const result = await dataSources.userAPI.cancelTrip({ launchId })
