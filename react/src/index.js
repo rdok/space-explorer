@@ -14,9 +14,8 @@ import injectStyles from './styles'
 
 const cache = new InMemoryCache()
 
-const uri = process.env.GRAPHQL_API_URL || 'http://localhost:4000/' 
-
-console.log(process.env)
+const uri = process.env.GRAPHQL_API_URL 
+   || 'https://api.space-explorer.rdok.dev/' 
 
 const link = new HttpLink({
     uri: uri,
