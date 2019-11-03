@@ -1,9 +1,17 @@
-FROM node:12-alpine
+FROM nginx:1.17-alpine
 
-COPY . /app
+LABEL maintainer="Rizart Dokollari <***REMOVED***>" \
+    version="1.0"
 
-WORKDIR /app
+COPY . /workbench
+WORKDIR /workbench
 
-RUN npm install --production
+RUN apk add yarn \
+ && rm -rf /tmp/* /var/cache/apk
 
-ENTRYPOINT ["npm", "run", "production"]
+RUN yarn install && yarn build
+
+COPY build /usr/share/nginx/html
+
+RUN rm -rf /workbench \
+       && apk del yarn
