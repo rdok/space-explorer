@@ -12,6 +12,8 @@ services:
       - VIRTUAL_PORT
       - LETSENCRYPT_HOST
       - LETSENCRYPT_EMAIL
+      - GRAPHQL_API_URL
+      - PUBLIC_URL
     ports:
       - "${VIRTUAL_PORT}:80"
 
