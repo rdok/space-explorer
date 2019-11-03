@@ -21,8 +21,8 @@ pipeline {
             agent { label "rdok.dev" }
             steps { dir('react') { ansiColor('xterm') { sh '''
             docker run --rm -v jenkinsrdokdev_jenkins.rdok.dev:"$JENKINS_HOME" \
+                --user $(id -u):$(id -g) \
                 -w "$WORKSPACE/react" \
-                -e GRAPHQL_API_URL='https://api.space-explorer.rdok.dev/' \
                 node:12-alpine sh -c \
                 "yarn install; yarn run build"
              docker-compose build --pull
