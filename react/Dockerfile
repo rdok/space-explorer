@@ -12,9 +12,6 @@ RUN apk add yarn \
 RUN yarn install
 RUN yarn run build
 
-RUN ls -lat .
-RUN ls -lat /us/share/nginx
-
 COPY build /usr/share/nginx/html
 
 RUN rm -rf /workbench \
