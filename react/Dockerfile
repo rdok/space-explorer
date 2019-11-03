@@ -6,15 +6,17 @@ LABEL maintainer="Rizart Dokollari <r.dokollari@gmail.com>" \
 RUN apk add yarn \
  && rm -rf /tmp/* /var/cache/apk
 
-COPY package.json package.json
+WORKDIR /workbench
+COPY package.json yarn.lock ./
 RUN yarn install
 
-COPY . /workbench
-WORKDIR /workbench
+COPY ./*.js /workbench/
+COPY src /workbench/src
+COPY public /workbench/public
 
-RUN yarn run build
-
-COPY build /usr/share/nginx/html
+RUN yarn run build && \
+      rm -rf /usr/share/nginx/html && \
+      mv build /usr/share/nginx/html
 
 RUN rm -rf /workbench \
        && apk del yarn
