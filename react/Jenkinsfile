@@ -8,27 +8,24 @@ pipeline {
         LETSENCRYPT_HOST = 'space-explorer.rdok.dev'
         LETSENCRYPT_EMAIL = credentials('rdok-email')
         DEFAULT_EMAIL = credentials('rdok-email')
+        GRAPHQL_API_URL = 'https://api.space-explorer.rdok.dev/'
+        PUBLIC_URL = 'https://space-explorer.rdok.dev/'
     }
     stages {
         stage('Test') { steps { dir('react') { ansiColor('xterm') {
             sh '''
             docker run -e CI=true --rm -v $(pwd):/app -w /app node:12-alpine \
                 sh -c \
-                    "yarn install; yarn run test  --coverage --coverageDirectory='./report' --ci"
+                    "yarn install; yarn run test --coverage --coverageDirectory='./report' --ci"
                     '''
         } } } }
         stage('Deploy') {
             agent { label "rdok.dev" }
             steps { dir('react') { ansiColor('xterm') { sh '''
-            docker run --rm -v jenkinsrdokdev_jenkins.rdok.dev:"$JENKINS_HOME" \
-                -w "$WORKSPACE/react" \
-                -e GRAPHQL_API_URL='https://api.space-explorer.rdok.dev/' \
-                node:12-alpine sh -c \
-                "yarn install; yarn run build"
-             docker-compose build --pull
-             docker-compose down --remove-orphans
-             docker-compose up -d
-                '''
+                docker-compose build --pull
+                docker-compose down --remove-orphans
+                docker-compose up -d
+             '''
             } } }
         }
         stage('Health Check') { 

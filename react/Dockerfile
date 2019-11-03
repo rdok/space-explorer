@@ -1,3 +1,9 @@
-FROM nginx:1.17-alpine
+FROM node:12-alpine
 
-COPY build /usr/share/nginx/html
+COPY . /app
+
+WORKDIR /app
+
+RUN npm install --production
+
+ENTRYPOINT ["npm", "run", "production"]
