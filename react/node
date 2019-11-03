@@ -4,7 +4,5 @@ docker run --rm -it \
     --volume $(pwd):/app \
     --workdir /app \
     --user $(id -u):$(id -g) \
-    --network node \
-    --env-file .env \
     node:12-alpine \
-    npm $@
+    $@
