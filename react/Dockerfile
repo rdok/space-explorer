@@ -9,7 +9,7 @@ WORKDIR /workbench
 RUN apk add yarn \
  && rm -rf /tmp/* /var/cache/apk
 
-RUN yarn install && yarn build
+RUN yarn install && yarn run build
 
 COPY build /usr/share/nginx/html
 
