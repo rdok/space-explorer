@@ -12,20 +12,20 @@ pipeline {
     stages {
         stage('Test') { steps { dir('react') { ansiColor('xterm') {
             sh '''
-            docker run -e CI=true --rm -v $(pwd):/app -w /app \
+            docker run --rm -v $(pwd):/app -w /app \
                --user $(id -u):$(id -g) \
                node:12-alpine \
-               sh -c "yarn install; yarn run test --coverage --coverageDirectory='./report' --ci"
+               sh -c "yarn install; yarn run jest --coverage --coverageDirectory='./report' --ci"
             '''
         } } } }
         stage('Deploy') {
            agent { label "rdok.dev" }
            steps { dir('react') { ansiColor('xterm') { 
               sh '''
-                  docker-compose build --pull
-                  docker-compose down --remove-orphans
-                  docker-compose up -d
-            '''
+                     docker-compose build --pull
+                     docker-compose down --remove-orphans
+                     docker-compose up -d
+               '''
         } } } }
         stage('Health Check') { 
             agent { label "linux" }
