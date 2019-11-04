@@ -21,11 +21,11 @@ pipeline {
         stage('Deploy') { 
            agent { label "rdok.dev" }
            steps { dir('api') { ansiColor('xterm') {
-            sh '''
-                docker-compose build --pull
-                docker-compose down --remove-orphans
-                docker-compose up -d
-            '''
+              sh '''
+                     docker-compose build --pull
+                     docker-compose down --remove-orphans
+                     docker-compose up -d
+               '''
         } } } }
         stage('Health Check') { 
             agent { label "linux" }
@@ -52,6 +52,16 @@ pipeline {
         }
         success {
             slackSend message: "Stable: <${env.BUILD_URL}console | ${env.JOB_BASE_NAME}#${env.BUILD_NUMBER}>"
+        }
+        always {
+            publishHTML([
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: false,
+            reportFiles: 'index.html',
+            reportName: 'Coverage Report',
+            reportDir: 'api/report/lcov-report/'
+            ])
         }
     }
 }

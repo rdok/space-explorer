@@ -1,9 +1,14 @@
 FROM node:12-alpine
 
-COPY . /app
+LABEL maintainer="Rizart Dokollari <***REMOVED***>" \
+    version="1.0"
 
 WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --production
 
-RUN npm install --production
+COPY . /app
 
-ENTRYPOINT ["npm", "run", "production"]
+RUN yarn install --production
+
+ENTRYPOINT ["yarn", "run", "production"]
