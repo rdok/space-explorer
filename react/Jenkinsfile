@@ -13,16 +13,18 @@ pipeline {
         stage('Test') { steps { dir('react') { ansiColor('xterm') {
             sh '''
             docker run -e CI=true --rm -v $(pwd):/app -w /app node:12-alpine \
-                sh -c \
-                    "yarn install; yarn run test --coverage --coverageDirectory='./report' --ci"
-                    '''
+               --user $(id -u):$(id -g) \
+               sh -c \
+                  "yarn install; yarn run test --coverage --coverageDirectory='./report' --ci"
+            '''
         } } } }
         stage('Deploy') {
             agent { label "rdok.dev" }
-            steps { dir('react') { ansiColor('xterm') { sh '''
-             docker-compose build --pull
-             docker-compose down --remove-orphans
-             docker-compose up -d
+            steps { dir('react') { ansiColor('xterm') { 
+               sh '''
+                docker-compose build --pull
+                docker-compose down --remove-orphans
+                docker-compose up -d
              '''
             } } }
         }
