@@ -19,18 +19,18 @@ export const GET_LAUNCH_DETAILS = gql`
     }
     ${LAUNCH_TILE_DATA}
 `
-export default function Launch({ launchId }) {
+export default function Launch( { launchId } ) {
     const { data, loading, error } = useQuery(
         GET_LAUNCH_DETAILS,
-        { variable: { launchId } }
+        { variables: { launchId } }
     )
 
     if ( loading ) return <Loading />
-    if ( error ) return <p>ERROR: {error.message}</p>
+    if ( error ) return <p>ERROR.Launch: {error.message}</p>
 
     return (
         <Fragment>
-            <Header image={data.lauch.mission.missionPatch}>
+            <Header image={data.launch.mission.missionPatch}>
                 {data.launch.mission.name}
             </Header>
             <LaunchDetail { ...data.launch } />
