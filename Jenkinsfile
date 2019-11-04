@@ -14,19 +14,28 @@ pipeline {
         }
     }
         stage('Test API') {
-         steps {
-            dir('api') {
-               ansiColor('xterm') {
-                  sh '''
-                     docker run --rm -v $(pwd):/app -w /app \
-                     --user $(id -u):$(id -g) \
-                     node:12-alpine \
-                     sh -c "yarn install; yarn run jest --coverage --coverageDirectory='./report' --ci"
-                  '''
-                    } 
-                }
-            }
+            steps {
+               dir('api') {
+                  ansiColor('xterm') {
+                     sh '''
+                        docker run --rm -v $(pwd):/app -w /app \
+                        --user $(id -u):$(id -g) \
+                        node:12-alpine \
+                        sh -c "yarn install; yarn run jest --ci"
+                     '''
+                       } 
+                   }
+               }
         }
+        stage('Test React') { steps { dir('react') { ansiColor('xterm') {
+            sh '''
+            docker run --rm -v $(pwd):/app -w /app \
+               -e CI=true \
+               --user $(id -u):$(id -g) \
+               node:12-alpine \
+               sh -c "yarn install; yarn run test --ci"
+            '''
+        } } } }
     }
     post {
         failure {
