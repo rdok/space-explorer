@@ -13,9 +13,10 @@ pipeline {
         stage('Test') { steps { dir('react') { ansiColor('xterm') {
             sh '''
             docker run --rm -v $(pwd):/app -w /app \
+               -e CI=true \
                --user $(id -u):$(id -g) \
                node:12-alpine \
-               sh -c "yarn install; yarn run jest --coverage --coverageDirectory='./report' --ci"
+               sh -c "yarn install; yarn run test -- --coverage --coverageDirectory='./report' --ci"
             '''
         } } } }
         stage('Deploy') {
