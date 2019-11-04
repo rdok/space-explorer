@@ -12,10 +12,10 @@ pipeline {
     stages {
         stage('Test') { steps { dir('api') { ansiColor('xterm') {
             sh '''
-            docker run -e CI=true --rm -v $(pwd):/app -w /app node:12-alpine \
+            docker run -e CI=true --rm -v $(pwd):/app -w /app \
                --user $(id -u):$(id -g) \
-               sh -c \
-                  "yarn install; yarn run test --coverage --coverageDirectory='./report' --ci"
+               node:12-alpine \
+               sh -c "yarn install; yarn run test --coverage --coverageDirectory='./report' --ci"
             '''
         } } } }
         stage('Deploy') { 
