@@ -1,5 +1,5 @@
 pipeline {
-    agent { label "rdok.dev" }
+    agent { label "linux" }
     triggers { cron('H H(18-19) * * *') }
     options { buildDiscarder( logRotator( numToKeepStr: '30' ) ) }
     environment {
@@ -10,7 +10,17 @@ pipeline {
         DEFAULT_EMAIL = credentials('rdok-email')
     }
     stages {
-        stage('Deploy') { steps { dir('api') { ansiColor('xterm') {
+        stage('Test') { steps { dir('api') { ansiColor('xterm') {
+            sh '''
+            docker run -e CI=true --rm -v $(pwd):/app -w /app node:12-alpine \
+               --user $(id -u):$(id -g) \
+               sh -c \
+                  "yarn install; yarn run test --coverage --coverageDirectory='./report' --ci"
+            '''
+        } } } }
+        stage('Deploy') { 
+           agent { label "rdok.dev" }
+           steps { dir('api') { ansiColor('xterm') {
             sh '''
                 docker-compose build --pull
                 docker-compose down --remove-orphans
