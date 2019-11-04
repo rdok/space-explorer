@@ -12,59 +12,14 @@ React - https://space-explorer.rdok.dev/ [![Build Status](https://jenkins.rdok.d
 ### GraphQL Requests
 
 ```
-query GetLaunchIds {
-  launches {
-    id
-    site
-    mission {
-      name
-    }
-    rocket {
-      id
-      name
-      type
-    }
-  }
-}
-
-query GetLaunchById($id: ID!) {
-  launch(id: $id) {
-    id
-    rocket {
-      id
-      type
-    }
-  }
-}
-
-
 query PaginateLaunches {
   launches(pageSize: 3){
     launches {
       id
       site
+      mission { name } 
+      rocket { id name type }
     }
   }
-}
-
-mutation LoginUser {
-  login(email: "r.dokollari@gmail.com")
-}
-
-mutation BookTrips {
-  bookTrips(launchIds: [67, 68, 69]) {
-    success
-    message
-    launches {
-      id
-    }
-  }
-}
-```
-
-#### HTTP Headers
-```
-{
-	"authorization" :"****************************"
 }
 ```
