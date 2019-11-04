@@ -1,4 +1,6 @@
-## SpaceX Explorer using GraphQL - [Specs](https://www.apollographql.com/docs/tutorial/introduction/)
+## SpaceX Explorer using GraphQL
+
+> Reserve a seat on an upcoming SpaceX launch. Think of it as an Airbnb for space travel! All of the data is real, thanks to the SpaceX-API. [Specs](https://www.apollographql.com/docs/tutorial/introduction/)
 
 API - https://api.space-explorer.rdok.dev/ [![Build Status](https://jenkins.rdok.dev/buildStatus/icon?job=space-explorer%2FAPI)](https://jenkins.rdok.dev/view/Training/job/space-explorer/job/API/) 
 
