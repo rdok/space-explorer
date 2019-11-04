@@ -19,15 +19,14 @@ pipeline {
             '''
         } } } }
         stage('Deploy') {
-            agent { label "rdok.dev" }
-            steps { dir('react') { ansiColor('xterm') { 
-               sh '''
-                docker-compose build --pull
-                docker-compose down --remove-orphans
-                docker-compose up -d
-             '''
-            } } }
-        }
+           agent { label "rdok.dev" }
+           steps { dir('react') { ansiColor('xterm') { 
+              sh '''
+                  docker-compose build --pull
+                  docker-compose down --remove-orphans
+                  docker-compose up -d
+            '''
+        } } } }
         stage('Health Check') { 
             agent { label "linux" }
             steps { 
