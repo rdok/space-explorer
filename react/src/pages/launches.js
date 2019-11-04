@@ -36,7 +36,7 @@ export const GET_LAUNCHES = gql`
 export default function Launches() {
     const { data, loading, error, fetchMore } = useQuery(GET_LAUNCHES)
     if ( loading ) return <Loading />
-    if ( error ) return <p>ERROR: { error.message } </p>
+    if ( error ) return <p>ERROR.Launches: { error.message } </p>
 
     return (
         <Fragment>
