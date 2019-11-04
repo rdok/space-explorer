@@ -8,11 +8,9 @@ pipeline {
                context: 'CI',
                credentialsId: 'github-status-notifier',
                description: 'Jenkins',
-               gitApiUrl: '',
                repo: 'space-explorer',
                sha: "${env.GIT_COMMIT}",
-               status: 'PENDING',
-               targetUrl: ''
+               status: 'PENDING'
         }
     }
         stage('Test API') {
@@ -28,6 +26,26 @@ pipeline {
                     } 
                 }
             }
+        }
+    }
+    post {
+        failure {
+            githubNotify account: 'rdok',
+               context: 'CI',
+               credentialsId: 'github-status-notifier',
+               description: 'Jenkins',
+               repo: 'space-explorer',
+               sha: "${env.GIT_COMMIT}",
+               status: 'FAILURE'
+        }
+        success {
+            githubNotify account: 'rdok',
+               context: 'CI',
+               credentialsId: 'github-status-notifier',
+               description: 'Jenkins',
+               repo: 'space-explorer',
+               sha: "${env.GIT_COMMIT}",
+               status: 'SUCCESS'
         }
     }
 }
