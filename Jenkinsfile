@@ -1,6 +1,6 @@
 pipeline {
     agent { label "linux" }
-    options {  buildDiscarder( logRotator( numToKeepStr: '30' ) ) }
+    options {  buildDiscarder( logRotator( numToKeepStr: '5' ) ) }
     stages {
     stage('Notify Github') {
         steps {
