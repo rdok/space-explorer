@@ -30,17 +30,8 @@ pipeline {
         } } } }
         stage('Health Check') { 
             agent { label "linux" }
-            steps { 
-                retry(10) { 
-                    sleep time: 6, unit: 'SECONDS'
-                    sh '''
-                    response=$(curl 'https://space-explorer.rdok.dev/' -H 'Accept: text/html')
-                    expected='<title>Launches</title>'
-                    test "${response#*$expected}" != "$response" \
-                    || error "Failed asserting the Space Explorer react loads correctly"
-                    '''
-                }
-            } }
+            steps { build 'react-health-check' } 
+        }
     }
     post {
         failure {
