@@ -27,19 +27,12 @@ pipeline {
                      docker-compose up -d
                '''
         } } } }
-        stage('Health Check') { 
+        stage('Health Check') {
             agent { label "linux" }
             steps { 
-                retry(10) { 
-                    sleep time: 6, unit: 'SECONDS'
-                    sh '''
-                    response=$(curl 'https://api.space-explorer.rdok.dev/' -H 'Accept: text/html')
-                    expected='<title>GraphQL Playground</title>'
-                    test "${response#*$expected}" != "$response" \
-                        || error "Failed asserting the GraphQL API loads correctly"
-                    '''
-            }
-        } }
+                build 'api-health-check'
+            } 
+        }
     }
     post {
         failure {
