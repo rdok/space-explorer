@@ -29,6 +29,7 @@ pipeline {
         } } } }
         stage('Health Check') {
             agent { label "linux" }
+            options { skipDefaultCheckout() }
             steps { 
                 build 'api-health-check'
             } 
