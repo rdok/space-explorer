@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
 
-  api.space-explorer.rdok.dev:
+  api:
     build:
       context: .
       dockerfile: Dockerfile

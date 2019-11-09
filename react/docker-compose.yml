@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
 
-  space-explorer.rdok.dev:
+  react:
     build:
       context: .
       dockerfile: Dockerfile

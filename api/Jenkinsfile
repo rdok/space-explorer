@@ -8,6 +8,7 @@ pipeline {
         LETSENCRYPT_HOST = 'api.space-explorer.rdok.dev'
         LETSENCRYPT_EMAIL = credentials('rdok-email')
         DEFAULT_EMAIL = credentials('rdok-email')
+        COMPOSE_PROJECT_NAME = 'space-explorer-api'
     }
     stages {
         stage('Test') { steps { dir('api') { ansiColor('xterm') {
