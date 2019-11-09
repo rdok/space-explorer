@@ -41,9 +41,8 @@ const server = new ApolloServer({
 
 
 if( process.env.NODE_ENV !== 'test') {
-    server.listen( { port: 4000, cors: true } ).then(({ url }) => {
-          console.log(`Server ready at ${url}`);
-    })
+    server.listen({ port: process.env.VIRTUAL_PORT, cors: true })
+        .then(({ url }) => { console.log(`Server ready at ${url}`) })
 }
 
 // Used by integration & e2e tests

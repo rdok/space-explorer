@@ -13,7 +13,7 @@ services:
       - LETSENCRYPT_HOST
       - LETSENCRYPT_EMAIL
     ports:
-      - "${VIRTUAL_PORT}:4000"
+      - "${VIRTUAL_PORT}:${VIRTUAL_PORT}"
 
 
 networks:
