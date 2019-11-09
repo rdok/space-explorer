@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --watchAll",
     "dev": "nodemon src/index.js",
-    "production": "node src/index.js"
+    "build": "babel -d ./build ./src -s",
+    "production": "node ./build/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,15 @@
   ],
   "author": "Rizart Dokollari",
   "license": "MIT",
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules",
+      "/__utils"
+    ]
+  },
   "dependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
     "apollo-datasource-rest": "^0.6.5",
     "apollo-server": "^2.9.6",
     "graphql": "^14.5.8",
@@ -30,12 +39,6 @@
     "jest": "^24.9.0",
     "sequelize": "^5.21.1",
     "sqlite3": "^4.1.0"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules",
-      "/__utils"
-    ]
   },
   "devDependencies": {
     "apollo-link-http": "^1.5.16",
