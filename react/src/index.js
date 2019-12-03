@@ -18,7 +18,7 @@ console.log(process.env.NODE_ENV )
 console.log(process.env )
 
 const uri = process.env.NODE_ENV === 'production'
-   ? 'https://api-space-explorer.rdok.dev/'
+   ? 'https://api.space-explorer.rdok.dev/'
    : 'http://localhost:4000/'
 
 const link = new HttpLink({
