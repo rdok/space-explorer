@@ -1,4 +1,4 @@
-name: Build react
+name: Build React
 on:
   push:
     branches:
