@@ -36,7 +36,7 @@ jobs:
       run: |
         git add --all
         git commit --message "Publish build $GITHUB_SHA"
-        git push origin origin/gh-pages
+        git push origin HEAD:gh-pages
     - name: Remove credentials
       if: ${{ always() }}
       run: rm --force $HOME/.netrc
