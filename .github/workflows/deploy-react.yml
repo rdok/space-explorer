@@ -1,8 +1,8 @@
-name: Deploy react
+name: Deploy React
 on:
   push:
-    branches: 'react-deploy'
 #    branches: 'master'
+    branches: '**'
 defaults:
   run:
     working-directory: react
@@ -11,8 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: yarn
-    - run: yarn  test
-    - run: CI=true yarn build
-    - run: git add --all && git commit -m 'Publish new build.'
-    - run: git push origin gh-pages
+    - name: Build
+      run: |
+        BRANCH=$(git rev-parse --abbrev-ref HEAD)
+        git fetch origin gh-pages
+        git checkout gh-pages
+        git merge $BRANCH
+
+        yarn
+        yarn test
+
+        OWNER=$(echo "${GITHUB_REPOSITORY}" | sed --expression 's/\/.*//g')
+        REPO=$(echo "${GITHUB_REPOSITORY}" | sed --expression 's/.*\///g')
+        export PUBLIC_URL="https://${OWNER}.github.io/${REPO}/"
+
+        yarn build
+        rm --force --recursive ../docs
+        mv build ../docs
+
+        git add --all
+
+        echo "machine github.com" >> $HOME/.netrc
+        echo "login $GITHUB_ACTOR" >> $HOME/.netrc
+        echo "password $GITHUB_TOKEN" >> $HOME/.netrc
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit --message "Publish build $GITHUB_SHA"
+
+        git push origin gh-pages
+        rm $HOME/.netrc
