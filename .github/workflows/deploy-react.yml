@@ -1,7 +1,11 @@
 name: Deploy react
 on:
   push:
-    branches: 'master'
+    branches: 'react-deploy'
+#    branches: 'master'
+defaults:
+  run:
+    working-directory: react
 jobs:
   build:
     runs-on: ubuntu-latest
