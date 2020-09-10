@@ -1,8 +1,7 @@
-name: Deploy react
+name: Deploy React
 on:
   push:
-    branches: 'react-deploy'
-#    branches: 'master'
+    branches: 'master'
 defaults:
   run:
     working-directory: react
@@ -11,8 +10,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: yarn
-    - run: yarn  test
-    - run: CI=true yarn build
-    - run: git add --all && git commit -m 'Publish new build.'
-    - run: git push origin gh-pages
+    - name: Setup auth
+      run: |
+        echo "machine github.com" >> $HOME/.netrc
+        echo "login $GITHUB_ACTOR" >> $HOME/.netrc
+        echo "password $GITHUB_TOKEN" >> $HOME/.netrc
+    - name: Setup Git user
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+    - name: Git fetch history
+      run: git fetch --unshallow origin master gh-pages
+    - name: Git merge gh-pages
+      run: git merge --strategy=ours origin/gh-pages
+    - run: yarn && yarn test
+    - name: Build
+      run: |
+        OWNER=$(echo "${GITHUB_REPOSITORY}" | sed --expression 's/\/.*//g')
+        REPO=$(echo "${GITHUB_REPOSITORY}" | sed --expression 's/.*\///g')
+        export PUBLIC_URL="https://${OWNER}.github.io/${REPO}/"
+        yarn build
+        rm --force --recursive ../docs
+        mv --force build ../docs
+    - name: Deploy
+      run: |
+        git add --all
+        git commit --message "Publish build $GITHUB_SHA"
+        git push origin HEAD:gh-pages
+    - name: Remove credentials
+      if: ${{ always() }}
+      run: rm --force $HOME/.netrc
