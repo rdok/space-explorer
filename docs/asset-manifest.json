@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.js": "https://rdok.github.io/space-explorer/static/js/main.27a0df9a.chunk.js",
+    "main.js.map": "https://rdok.github.io/space-explorer/static/js/main.27a0df9a.chunk.js.map",
+    "runtime-main.js": "https://rdok.github.io/space-explorer/static/js/runtime-main.34e16b98.js",
+    "runtime-main.js.map": "https://rdok.github.io/space-explorer/static/js/runtime-main.34e16b98.js.map",
+    "static/js/2.3ffa2e50.chunk.js": "https://rdok.github.io/space-explorer/static/js/2.3ffa2e50.chunk.js",
+    "static/js/2.3ffa2e50.chunk.js.map": "https://rdok.github.io/space-explorer/static/js/2.3ffa2e50.chunk.js.map",
+    "index.html": "https://rdok.github.io/space-explorer/index.html",
+    "precache-manifest.dfbab8f71938b0f0fb87c915f6c1afe8.js": "https://rdok.github.io/space-explorer/precache-manifest.dfbab8f71938b0f0fb87c915f6c1afe8.js",
+    "service-worker.js": "https://rdok.github.io/space-explorer/service-worker.js",
+    "static/js/2.3ffa2e50.chunk.js.LICENSE.txt": "https://rdok.github.io/space-explorer/static/js/2.3ffa2e50.chunk.js.LICENSE.txt",
+    "static/media/cart.0a4ee70b.svg": "https://rdok.github.io/space-explorer/static/media/cart.0a4ee70b.svg",
+    "static/media/curve.33d00d40.svg": "https://rdok.github.io/space-explorer/static/media/curve.33d00d40.svg",
+    "static/media/dog-1.png": "https://rdok.github.io/space-explorer/static/media/dog-1.f25b4cba.png",
+    "static/media/dog-2.png": "https://rdok.github.io/space-explorer/static/media/dog-2.ab7a533b.png",
+    "static/media/dog-3.png": "https://rdok.github.io/space-explorer/static/media/dog-3.b6280374.png",
+    "static/media/exit.5bb388b5.svg": "https://rdok.github.io/space-explorer/static/media/exit.5bb388b5.svg",
+    "static/media/galaxy.jpg": "https://rdok.github.io/space-explorer/static/media/galaxy.0b1c6775.jpg",
+    "static/media/home.a8474d8e.svg": "https://rdok.github.io/space-explorer/static/media/home.a8474d8e.svg",
+    "static/media/iss.jpg": "https://rdok.github.io/space-explorer/static/media/iss.48932214.jpg",
+    "static/media/logo.3e5f8e36.svg": "https://rdok.github.io/space-explorer/static/media/logo.3e5f8e36.svg",
+    "static/media/moon.jpg": "https://rdok.github.io/space-explorer/static/media/moon.493bbb75.jpg",
+    "static/media/profile.3eddd922.svg": "https://rdok.github.io/space-explorer/static/media/profile.3eddd922.svg",
+    "static/media/rocket.aeabe034.svg": "https://rdok.github.io/space-explorer/static/media/rocket.aeabe034.svg",
+    "static/media/space.jpg": "https://rdok.github.io/space-explorer/static/media/space.7dfc7923.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.34e16b98.js",
+    "static/js/2.3ffa2e50.chunk.js",
+    "static/js/main.27a0df9a.chunk.js"
+  ]
+}
