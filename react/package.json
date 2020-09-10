@@ -6,8 +6,7 @@
    "scripts": {
       "start": "react-scripts start",
       "test": "react-scripts test",
-      "build": "react-scripts build",
-      "production": "node src/index.js"
+      "build": "react-scripts build"
    },
    "repository": {
       "type": "git",
