@@ -20,5 +20,5 @@ jobs:
     - name: Publish
       uses: rdok/publish-gh-page-action@v1.0.3
       with:
-        directory: build
+        directory: react/build
         github-token: ${{ github.token }}
