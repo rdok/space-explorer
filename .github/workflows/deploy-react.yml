@@ -20,4 +20,4 @@ jobs:
     - name: Publish
       uses: rdok/publish-gh-page-action@v1.2.1
       with:
-        directory: react/build
+        directory: build
