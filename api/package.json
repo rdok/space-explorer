@@ -33,7 +33,7 @@
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
     "apollo-datasource-rest": "^0.6.5",
-    "apollo-server": "^2.14.2",
+    "apollo-server": "^2.25.3",
     "graphql": "^14.5.8",
     "isemail": "^3.2.0",
     "jest": "^24.9.0",
