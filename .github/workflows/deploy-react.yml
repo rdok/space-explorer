@@ -1,7 +1,7 @@
 name: Deploy React
 on:
   push:
-    branches: 'master'
+    branches: [ 'main' ]
 defaults:
   run:
     working-directory: react
@@ -9,15 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: yarn && yarn test
-    - name: Build
-      run: |
-        OWNER=$(echo "${GITHUB_REPOSITORY}" | sed --expression 's/\/.*//g')
-        REPO=$(echo "${GITHUB_REPOSITORY}" | sed --expression 's/.*\///g')
-        export PUBLIC_URL="https://${OWNER}.github.io/${REPO}/"
-        yarn build
-    - name: Publish
-      uses: rdok/publish-gh-page-action@v1.2.2
-      with:
-        directory: react/build
+      - uses: actions/checkout@v2
+      - run: yarn && yarn test
+      - name: Build
+        run: |
+          OWNER=$(echo "${GITHUB_REPOSITORY}" | sed --expression 's/\/.*//g')
+          REPO=$(echo "${GITHUB_REPOSITORY}" | sed --expression 's/.*\///g')
+          export PUBLIC_URL="https://${OWNER}.github.io/${REPO}/"
+          yarn build
+      - name: Publish
+        uses: rdok/publish-gh-page-action@v1.2.2
+        with:
+          directory: react/build
